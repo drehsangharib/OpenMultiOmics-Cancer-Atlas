@@ -336,6 +336,25 @@ def contains_any(value: object, query_terms: Optional[Iterable[str]]) -> bool:
     return False
 
 
+def equals_any(value: object, query_terms: Optional[Iterable[str]]) -> bool:
+    """
+    Return True if value exactly equals any query term, case-insensitively.
+
+    This is stricter than contains_any and is useful for exact primary-site or
+    disease-type filters.
+    """
+    if not query_terms:
+        return True
+
+    text = normalize_lower(value)
+
+    for term in query_terms:
+        if text == normalize_lower(term):
+            return True
+
+    return False
+
+
 def normalize_modality_name(modality: str) -> str:
     """
     Normalize user-provided modality names.
@@ -360,7 +379,9 @@ def build_subset_query_description(
     project_ids: Optional[List[str]] = None,
     programs: Optional[List[str]] = None,
     primary_sites: Optional[List[str]] = None,
+    primary_sites_exact: Optional[List[str]] = None,
     disease_types: Optional[List[str]] = None,
+    disease_types_exact: Optional[List[str]] = None,
     priority_labels: Optional[List[str]] = None,
     required_modalities: Optional[List[str]] = None,
     min_case_count: Optional[int] = None,
@@ -382,8 +403,14 @@ def build_subset_query_description(
     if primary_sites:
         parts.append("primary_site=" + ",".join(primary_sites))
 
+    if primary_sites_exact:
+        parts.append("primary_site_exact=" + ",".join(primary_sites_exact))
+
     if disease_types:
         parts.append("disease_type=" + ",".join(disease_types))
+
+    if disease_types_exact:
+        parts.append("disease_type_exact=" + ",".join(disease_types_exact))
 
     if priority_labels:
         parts.append("priority_label=" + ",".join(priority_labels))
@@ -414,7 +441,9 @@ def filter_project_subset(
     project_ids: Optional[List[str]] = None,
     programs: Optional[List[str]] = None,
     primary_sites: Optional[List[str]] = None,
+    primary_sites_exact: Optional[List[str]] = None,
     disease_types: Optional[List[str]] = None,
+    disease_types_exact: Optional[List[str]] = None,
     priority_labels: Optional[List[str]] = None,
     required_modalities: Optional[List[str]] = None,
     min_case_count: Optional[int] = None,
@@ -437,8 +466,14 @@ def filter_project_subset(
     if primary_sites:
         out = out[out["primary_site"].apply(lambda value: contains_any(value, primary_sites))]
 
+    if primary_sites_exact:
+        out = out[out["primary_site"].apply(lambda value: equals_any(value, primary_sites_exact))]
+
     if disease_types:
         out = out[out["disease_type"].apply(lambda value: contains_any(value, disease_types))]
+
+    if disease_types_exact:
+        out = out[out["disease_type"].apply(lambda value: equals_any(value, disease_types_exact))]
 
     if priority_labels:
         wanted_labels = {normalize_lower(label) for label in priority_labels}
@@ -471,7 +506,9 @@ def filter_project_subset(
         project_ids=project_ids,
         programs=programs,
         primary_sites=primary_sites,
+        primary_sites_exact=primary_sites_exact,
         disease_types=disease_types,
+        disease_types_exact=disease_types_exact,
         priority_labels=priority_labels,
         required_modalities=required_modalities,
         min_case_count=min_case_count,
@@ -492,7 +529,9 @@ def build_gdc_project_subset_from_dataframes(
     project_ids: Optional[List[str]] = None,
     programs: Optional[List[str]] = None,
     primary_sites: Optional[List[str]] = None,
+    primary_sites_exact: Optional[List[str]] = None,
     disease_types: Optional[List[str]] = None,
+    disease_types_exact: Optional[List[str]] = None,
     priority_labels: Optional[List[str]] = None,
     required_modalities: Optional[List[str]] = None,
     min_case_count: Optional[int] = None,
@@ -518,7 +557,9 @@ def build_gdc_project_subset_from_dataframes(
         project_ids=project_ids,
         programs=programs,
         primary_sites=primary_sites,
+        primary_sites_exact=primary_sites_exact,
         disease_types=disease_types,
+        disease_types_exact=disease_types_exact,
         priority_labels=priority_labels,
         required_modalities=required_modalities,
         min_case_count=min_case_count,
@@ -539,7 +580,9 @@ def build_gdc_project_subset(
     project_ids: Optional[List[str]] = None,
     programs: Optional[List[str]] = None,
     primary_sites: Optional[List[str]] = None,
+    primary_sites_exact: Optional[List[str]] = None,
     disease_types: Optional[List[str]] = None,
+    disease_types_exact: Optional[List[str]] = None,
     priority_labels: Optional[List[str]] = None,
     required_modalities: Optional[List[str]] = None,
     min_case_count: Optional[int] = None,
@@ -573,7 +616,9 @@ def build_gdc_project_subset(
         project_ids=project_ids,
         programs=programs,
         primary_sites=primary_sites,
+        primary_sites_exact=primary_sites_exact,
         disease_types=disease_types,
+        disease_types_exact=disease_types_exact,
         priority_labels=priority_labels,
         required_modalities=required_modalities,
         min_case_count=min_case_count,
@@ -643,10 +688,24 @@ def build_arg_parser() -> argparse.ArgumentParser:
     )
 
     parser.add_argument(
+        "--primary-site-exact",
+        action="append",
+        default=None,
+        help="Exact primary site match, e.g. Brain. Can be repeated.",
+    )
+
+    parser.add_argument(
         "--disease-type",
         action="append",
         default=None,
         help="Disease type text query, e.g. Gliomas, Adenocarcinomas. Can be repeated.",
+    )
+
+    parser.add_argument(
+        "--disease-type-exact",
+        action="append",
+        default=None,
+        help="Exact disease type match, e.g. Gliomas. Can be repeated.",
     )
 
     parser.add_argument(
@@ -710,7 +769,9 @@ def main(argv: Optional[List[str]] = None) -> int:
             project_ids=args.project_id,
             programs=args.program,
             primary_sites=args.primary_site,
+            primary_sites_exact=args.primary_site_exact,
             disease_types=args.disease_type,
+            disease_types_exact=args.disease_type_exact,
             priority_labels=args.priority_label,
             required_modalities=args.has_modality,
             min_case_count=args.min_case_count,

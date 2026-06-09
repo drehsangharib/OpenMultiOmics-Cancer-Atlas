@@ -247,3 +247,21 @@ def test_build_gdc_project_subset_from_dataframes():
     assert set(subset["project_id"]) == {"TCGA-GBM", "TCGA-BRCA"}
     assert "subset_query" in subset.columns
     assert "source_database" in subset.columns
+def test_filter_by_primary_site_exact():
+    subset = filter_project_subset(
+        joined_df=make_joined_df(),
+        primary_sites_exact=["Brain"],
+    )
+
+    assert subset.shape[0] == 1
+    assert subset.iloc[0]["project_id"] == "TCGA-GBM"
+
+
+def test_filter_by_disease_type_exact():
+    subset = filter_project_subset(
+        joined_df=make_joined_df(),
+        disease_types_exact=["Gliomas"],
+    )
+
+    assert subset.shape[0] == 1
+    assert subset.iloc[0]["project_id"] == "TCGA-GBM"
