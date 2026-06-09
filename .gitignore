@@ -71,3 +71,7 @@ outputs/reports/*
 !outputs/**/.gitkeep
 !examples/*.tsv
 !examples/*.csv
+
+# Generated figures
+outputs/figures/*
+!outputs/figures/.gitkeep
