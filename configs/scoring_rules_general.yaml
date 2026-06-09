@@ -1,0 +1,65 @@
+dataset_relevance_scoring:
+  disease_match:
+    exact_cancer_type: 5
+    related_cancer_type: 3
+    pan_cancer: 4
+    cancer_general: 2
+    none: 0
+  tissue_match:
+    exact_tissue: 5
+    related_tissue: 3
+    tumor_microenvironment: 5
+    cell_line: 2
+    unrelated: 0
+  organism_match:
+    Homo_sapiens: 5
+    Mus_musculus: 4
+    Rattus_norvegicus: 2
+    other: 0
+  omics_priority:
+    transcriptomics: 5
+    single_cell_transcriptomics: 5
+    proteomics: 5
+    phosphoproteomics: 5
+    epigenomics: 4
+    metabolomics: 4
+    genomics: 3
+    clinical: 3
+    unknown: 0
+  metadata_quality:
+    complete_sample_metadata: 5
+    partial_metadata: 2
+    poor_metadata: -3
+    unknown_metadata: 0
+  data_access:
+    both_raw_and_processed_available: 5
+    processed_matrix_available: 4
+    raw_data_available: 3
+    controlled_access_only: -2
+    unavailable: -5
+    unknown: 0
+  sample_size:
+    high_n_ge_50: 5
+    medium_n_10_to_49: 3
+    low_n_3_to_9: 1
+    very_low_n_lt_3: -2
+    unknown: 0
+  matched_multiomics:
+    same_samples_multiomics: 5
+    related_multiomics_not_same_samples: 3
+    single_omics_only: 0
+    unknown: 0
+weights:
+  disease_match: 1.5
+  tissue_match: 1.2
+  organism_match: 1.0
+  omics_priority: 1.2
+  metadata_quality: 1.0
+  data_access: 1.0
+  sample_size: 0.7
+  matched_multiomics: 1.5
+rank_thresholds:
+  excellent: 32
+  high: 24
+  medium: 15
+  low: 5

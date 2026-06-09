@@ -1,0 +1,79 @@
+databases:
+  GDC:
+    category: cancer
+    base_url: "https://portal.gdc.cancer.gov/"
+    supported_omics: [genomics, transcriptomics, methylation, clinical, cancer_multiomics]
+    access_type: public_and_controlled
+    priority: high
+  UCSC_Xena:
+    category: cancer
+    base_url: "https://xena.ucsc.edu/"
+    supported_omics: [transcriptomics, methylation, mutation, copy_number, clinical, multiomics]
+    access_type: public
+    priority: high
+  UALCAN:
+    category: cancer
+    base_url: "https://ualcan.path.uab.edu/"
+    supported_omics: [transcriptomics, methylation, proteomics, phosphoproteomics, clinical]
+    access_type: public
+    priority: medium
+  GEO:
+    category: sequencing
+    base_url: "https://www.ncbi.nlm.nih.gov/geo/"
+    supported_omics: [transcriptomics, epigenomics, single_cell_transcriptomics, multiomics]
+    access_type: public
+    priority: high
+  SRA:
+    category: sequencing
+    base_url: "https://www.ncbi.nlm.nih.gov/sra"
+    supported_omics: [transcriptomics, single_cell_transcriptomics, epigenomics, genomics]
+    access_type: public_and_controlled
+    priority: high
+  ENA:
+    category: sequencing
+    base_url: "https://www.ebi.ac.uk/ena"
+    supported_omics: [transcriptomics, single_cell_transcriptomics, epigenomics, genomics]
+    access_type: public
+    priority: high
+  PRIDE:
+    category: proteomics
+    base_url: "https://www.ebi.ac.uk/pride/"
+    supported_omics: [proteomics, phosphoproteomics, mass_spectrometry]
+    access_type: public
+    priority: high
+  ProteomeXchange:
+    category: proteomics
+    base_url: "http://www.proteomexchange.org/"
+    supported_omics: [proteomics, phosphoproteomics, mass_spectrometry]
+    access_type: public
+    priority: high
+  MassIVE:
+    category: proteomics
+    base_url: "https://massive.ucsd.edu/ProteoSAFe/static/massive.jsp"
+    supported_omics: [proteomics, phosphoproteomics, metabolomics, mass_spectrometry]
+    access_type: public
+    priority: high
+  ENCODE:
+    category: epigenomics
+    base_url: "https://www.encodeproject.org/"
+    supported_omics: [epigenomics, chromatin_accessibility, chipseq, atacseq, transcription_factor_binding]
+    access_type: public
+    priority: medium
+  MetaboLights:
+    category: metabolomics
+    base_url: "https://www.ebi.ac.uk/metabolights/"
+    supported_omics: [metabolomics, mass_spectrometry, nmr]
+    access_type: public
+    priority: medium
+  GNPS:
+    category: metabolomics
+    base_url: "https://gnps.ucsd.edu/"
+    supported_omics: [metabolomics, mass_spectrometry]
+    access_type: public
+    priority: medium
+  OmicsDI:
+    category: discovery
+    base_url: "https://www.omicsdi.org/"
+    supported_omics: [transcriptomics, genomics, proteomics, metabolomics, multiomics]
+    access_type: public
+    priority: high

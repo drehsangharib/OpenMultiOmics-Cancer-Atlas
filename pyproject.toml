@@ -1,0 +1,16 @@
+[project]
+name = "openmultiomics-cancer-atlas"
+version = "0.1.0"
+description = "Open-database-first public cancer multi-omics atlas and dataset ranking engine."
+requires-python = ">=3.10"
+readme = "README.md"
+license = { text = "MIT" }
+
+[tool.setuptools]
+packages = ["core"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+pythonpath = ["."]
+addopts = "-q"

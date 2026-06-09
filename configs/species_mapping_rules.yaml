@@ -1,0 +1,17 @@
+species_context_rules:
+  always_label_species_origin: true
+  species_categories:
+    human_tumor:
+      scientific_name: Homo sapiens
+      expected_context: [human cancer cohort, TCGA, CPTAC, patient tumor]
+    mouse_model:
+      scientific_name: Mus musculus
+      expected_context: [mouse cancer model, host microenvironment, syngeneic model, xenograft host]
+    mixed_or_uncertain:
+      description: Bulk data where species or cell-type origin may be mixed or not separable.
+  ortholog_mapping:
+    use_mouse_human_orthologs: true
+    preferred_sources: [MGI_HomoloGene, Ensembl_BioMart, NCBI_HomoloGene]
+  reporting_rules:
+    include_species_context_column: true
+    never_merge_mouse_and_human_without_labeling: true

@@ -1,0 +1,14 @@
+signature_targets:
+  tumor_intrinsic:
+    PI3K_AKT: [AKT1, AKT2, AKT3, PIK3CA, PIK3CB, MTOR, RPS6KB1, PTEN]
+    MAPK: [MAPK1, MAPK3, MAPK8, MAPK14, RAF1, BRAF, KRAS, NRAS]
+    STAT: [STAT1, STAT3, STAT5A, STAT5B, JAK1, JAK2]
+    NFkB: [NFKB1, NFKB2, RELA, RELB, IKBKB, CHUK]
+    proliferation_cell_cycle: [MKI67, PCNA, TOP2A, CCNB1, CCND1, CDK1, CDK2, MCM2, MCM5]
+    invasion_EMT: [MMP2, MMP9, VIM, SNAI1, SNAI2, TWIST1, CD44, ITGA5]
+  brain_microenvironment:
+    microglial_activation: [AIF1, ITGAM, CD68, TREM2, TYROBP, C1QA, C1QB, C1QC]
+    inflammatory_microglia: [IL1B, TNF, NOS2, CCL2, CCL3, CCL4, CCL5, CXCL9, CXCL10, CXCL11]
+    astrocyte_reactivity: [GFAP, AQP4, VIM, SERPINA3, LCN2, C3]
+    oligodendrocyte_myelination: [MBP, PLP1, MOBP, CNP, CLDN11, MAG, MAL, OPALIN, BCAS1, MOG]
+    neuronal_synaptic: [SYN1, SYN2, SYP, SNAP25, STX1A, VAMP2, GRIA1, GRIA2, GRM8]

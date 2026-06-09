@@ -1,0 +1,24 @@
+atlas_name: gbm
+version: "0.1"
+public_only: true
+biological_context:
+  disease: glioblastoma
+  disease_aliases: [GBM, glioma, brain tumor, glioblastoma multiforme]
+  primary_tissue: brain
+priority_omics:
+  - transcriptomics
+  - single_cell_transcriptomics
+  - proteomics
+  - phosphoproteomics
+  - epigenomics
+  - metabolomics
+priority_databases:
+  cancer: [GDC, TCGA, CPTAC, UCSC_Xena, UALCAN]
+  sequencing: [GEO, SRA, ENA]
+  proteomics: [PRIDE, ProteomeXchange, MassIVE]
+  epigenomics: [ENCODE]
+  metabolomics: [MetaboLights, GNPS, Metabolomics_Workbench]
+species_rules:
+  always_label_species_origin: true
+  distinguish_human_patient_from_mouse_model: true
+  use_mouse_human_ortholog_mapping: true

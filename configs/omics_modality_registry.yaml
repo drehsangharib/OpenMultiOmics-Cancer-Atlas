@@ -1,0 +1,19 @@
+omics_modalities:
+  transcriptomics:
+    common_inputs: [FASTQ, BAM, counts_matrix, expression_matrix]
+    public_repositories: [GEO, SRA, ENA, GDC, UCSC_Xena]
+  single_cell_transcriptomics:
+    common_inputs: [FASTQ, h5ad, h5, mtx]
+    public_repositories: [GEO, SRA, ENA]
+  proteomics:
+    common_inputs: [raw_ms, mzML, protein_abundance_table]
+    public_repositories: [PRIDE, ProteomeXchange, MassIVE, UALCAN]
+  phosphoproteomics:
+    common_inputs: [raw_ms, mzML, phosphosite_table]
+    public_repositories: [PRIDE, ProteomeXchange, MassIVE, UALCAN]
+  epigenomics:
+    common_inputs: [FASTQ, BAM, BED, peaks, methylation_matrix]
+    public_repositories: [GEO, SRA, ENA, ENCODE, GDC, UCSC_Xena]
+  metabolomics:
+    common_inputs: [raw_ms, mzML, metabolite_abundance_table]
+    public_repositories: [MetaboLights, GNPS, MassIVE]

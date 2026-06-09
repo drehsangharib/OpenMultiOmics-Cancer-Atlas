@@ -1,0 +1,73 @@
+
+# Python/cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Packaging/build artifacts
+*.egg-info/
+dist/
+build/
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Secrets
+.env
+*.key
+*.pem
+
+# Private/unpublished data protection
+configs_private/*
+data/private/*
+data/raw/*
+data/processed/*
+outputs/private/*
+outputs/manuscript/*
+
+# Large omics/raw files
+*.fastq
+*.fastq.gz
+*.fq
+*.fq.gz
+*.bam
+*.sam
+*.cram
+*.h5ad
+*.h5mu
+*.rds
+*.RData
+*.loom
+*.mzML
+*.mzXML
+*.raw
+*.wiff
+*.d
+
+# Generated outputs
+outputs/dataset_inventory/*
+outputs/ranked_datasets/*
+outputs/reports/*
+
+# Keep safe placeholders
+!data/README.md
+!outputs/README.md
+!outputs/**/.gitkeep
+!examples/*.tsv
+!examples/*.csv

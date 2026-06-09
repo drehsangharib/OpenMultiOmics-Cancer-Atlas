@@ -1,0 +1,21 @@
+cancer_types:
+  gbm:
+    display_name: Glioblastoma
+    aliases: [glioblastoma, GBM, glioblastoma multiforme, glioma, brain tumor]
+    primary_sites: [brain, central nervous system, cortex]
+    flagship: true
+  breast_cancer:
+    display_name: Breast Cancer
+    aliases: [breast cancer, BRCA, mammary carcinoma]
+    primary_sites: [breast]
+    flagship: false
+  lung_cancer:
+    display_name: Lung Cancer
+    aliases: [lung cancer, LUAD, LUSC, NSCLC, SCLC]
+    primary_sites: [lung]
+    flagship: false
+  pan_cancer:
+    display_name: Pan-Cancer
+    aliases: [pan-cancer, pancancer, TCGA pan-cancer]
+    primary_sites: [multiple]
+    flagship: false

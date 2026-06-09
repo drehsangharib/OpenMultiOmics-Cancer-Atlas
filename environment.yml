@@ -1,0 +1,16 @@
+name: openmultiomics-cancer-atlas
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - pandas
+  - pyyaml
+  - numpy
+  - requests
+  - beautifulsoup4
+  - lxml
+  - pytest
+  - jupyter
+  - matplotlib
+  - seaborn
+  - scikit-learn
