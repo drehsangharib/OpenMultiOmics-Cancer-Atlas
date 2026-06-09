@@ -162,9 +162,10 @@ def test_build_top_project_heatmap_matrix():
     assert matrix.loc["TCGA-LUAD", "DNA methylation"] == 0
 
 
-def test_generate_gdc_priority_visuals(tmp_path: Path):
+def test_generate_gdc_priority_visuals_without_file_counts(tmp_path: Path):
     ranking_path = tmp_path / "ranking.tsv"
     modality_path = tmp_path / "modality.tsv"
+    file_counts_path = tmp_path / "missing_file_counts.tsv"
     figures_dir = tmp_path / "figures"
 
     make_ranking_df().to_csv(ranking_path, sep="\t", index=False)
@@ -173,17 +174,84 @@ def test_generate_gdc_priority_visuals(tmp_path: Path):
     outputs = generate_gdc_priority_visuals(
         priority_ranking_path=ranking_path,
         modality_matrix_path=modality_path,
+        file_counts_path=file_counts_path,
         figures_dir=figures_dir,
         top_n=2,
     )
 
-    assert set(outputs.keys()) == {
+    expected_keys = {
         "priority_label_distribution",
         "modality_coverage",
         "project_modality_heatmap",
         "pipeline_schematic",
+        "project_modality_heatmap_top_binary",
+        "project_modality_heatmap_all_binary",
     }
+
+    assert set(outputs.keys()) == expected_keys
 
     for path in outputs.values():
         assert path.exists()
         assert path.stat().st_size > 0
+
+
+def test_generate_gdc_priority_visuals_with_file_counts(tmp_path: Path):
+    ranking_path = tmp_path / "ranking.tsv"
+    modality_path = tmp_path / "modality.tsv"
+    file_counts_path = tmp_path / "file_counts.tsv"
+    figures_dir = tmp_path / "figures"
+
+    make_ranking_df().to_csv(ranking_path, sep="\t", index=False)
+    make_modality_df().to_csv(modality_path, sep="\t", index=False)
+
+    file_counts_df = pd.DataFrame(
+        [
+            {
+                "project_id": "TCGA-GBM",
+                "data_category": "Transcriptome Profiling",
+                "data_type": "Gene Expression Quantification",
+                "experimental_strategy": "RNA-Seq",
+                "workflow_type": "STAR - Counts",
+                "data_format": "TSV",
+                "access": "open",
+                "file_count": 100,
+            },
+            {
+                "project_id": "TCGA-LUAD",
+                "data_category": "DNA Methylation",
+                "data_type": "Methylation Beta Value",
+                "experimental_strategy": "Methylation Array",
+                "workflow_type": "",
+                "data_format": "TXT",
+                "access": "open",
+                "file_count": 50,
+            },
+        ]
+    )
+
+    file_counts_df.to_csv(file_counts_path, sep="\t", index=False)
+
+    outputs = generate_gdc_priority_visuals(
+        priority_ranking_path=ranking_path,
+        modality_matrix_path=modality_path,
+        file_counts_path=file_counts_path,
+        figures_dir=figures_dir,
+        top_n=2,
+    )
+
+    expected_keys = {
+        "priority_label_distribution",
+        "modality_coverage",
+        "project_modality_heatmap",
+        "pipeline_schematic",
+        "project_modality_heatmap_top_binary",
+        "project_modality_heatmap_all_binary",
+        "project_modality_filecount_heatmap",
+    }
+
+    assert set(outputs.keys()) == expected_keys
+
+    for path in outputs.values():
+        assert path.exists()
+        assert path.stat().st_size > 0
+
