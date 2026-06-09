@@ -141,8 +141,27 @@ FIGURE_CONFIGS = [
         "title": "Top-ranked project × modality heatmap",
         "filename": "gdc_project_modality_heatmap_top30.png",
         "caption": (
-            "Availability matrix for major data modalities among the top-ranked "
-            "GDC projects."
+            "Binary availability matrix for major data modalities among the "
+            "top-ranked GDC projects."
+        ),
+    },
+    {
+        "key": "all_project_modality_heatmap",
+        "title": "All-project modality availability heatmap",
+        "filename": "gdc_project_modality_heatmap_all_binary.png",
+        "caption": (
+            "Binary modality availability matrix across all ranked GDC projects. "
+            "This view highlights modality coverage heterogeneity across the full "
+            "project set."
+        ),
+    },
+    {
+        "key": "filecount_modality_heatmap",
+        "title": "Top-ranked project × modality file-count heatmap",
+        "filename": "gdc_project_modality_filecount_heatmap_top30.png",
+        "caption": (
+            "Quantitative modality-depth heatmap for top-ranked GDC projects. "
+            "Color intensity represents log10(file count + 1)."
         ),
     },
 ]
