@@ -6,11 +6,14 @@ import pytest
 from core.reporting.gdc_priority_report import (
     build_bar_list,
     build_report_html,
+    build_single_figure_html,
+    build_visual_sections,
     clean_modality_matrix,
     clean_priority_ranking,
     clean_project_inventory,
     dataframe_to_html_table,
     generate_gdc_priority_report,
+    image_file_to_data_uri,
     parse_bool,
     parse_int,
     summarize_modality_coverage,
@@ -115,6 +118,17 @@ def make_ranking_df():
     )
 
 
+def write_fake_png(path: Path) -> None:
+    path.write_bytes(
+        b"\x89PNG\r\n\x1a\n"
+        b"\x00\x00\x00\rIHDR"
+        b"\x00\x00\x00\x01\x00\x00\x00\x01"
+        b"\x08\x02\x00\x00\x00"
+        b"\x90wS\xde"
+        b"\x00\x00\x00\x00IEND\xaeB`\x82"
+    )
+
+
 def test_parse_int():
     assert parse_int("10") == 10
     assert parse_int(2.0) == 2
@@ -185,16 +199,87 @@ def test_build_bar_list():
     assert "A" in bars
 
 
-def test_build_report_html():
+def test_image_file_to_data_uri(tmp_path: Path):
+    image_path = tmp_path / "demo.png"
+    write_fake_png(image_path)
+
+    data_uri = image_file_to_data_uri(image_path)
+
+    assert data_uri is not None
+    assert data_uri.startswith("data:image/png;base64,")
+
+
+def test_image_file_to_data_uri_missing(tmp_path: Path):
+    data_uri = image_file_to_data_uri(tmp_path / "missing.png")
+    assert data_uri is None
+
+
+def test_build_single_figure_html_existing_file(tmp_path: Path):
+    image_path = tmp_path / "demo.png"
+    write_fake_png(image_path)
+
+    block = build_single_figure_html(
+        title="Demo figure",
+        image_path=image_path,
+        caption="Demo caption",
+        embed_images=True,
+    )
+
+    assert "Demo figure" in block
+    assert "data:image/png;base64" in block
+    assert "Demo caption" in block
+
+
+def test_build_single_figure_html_missing_file(tmp_path: Path):
+    block = build_single_figure_html(
+        title="Missing figure",
+        image_path=tmp_path / "missing.png",
+        caption="Missing caption",
+        embed_images=True,
+    )
+
+    assert "Figure not found" in block
+    assert "Missing figure" in block
+
+
+def test_build_visual_sections(tmp_path: Path):
+    for filename in [
+        "gdc_pipeline_schematic.png",
+        "gdc_priority_label_distribution.png",
+        "gdc_modality_coverage_barplot.png",
+        "gdc_project_modality_heatmap_top30.png",
+    ]:
+        write_fake_png(tmp_path / filename)
+
+    sections = build_visual_sections(figures_dir=tmp_path, embed_images=True)
+
+    assert "GDC metadata pipeline schematic" in sections
+    assert "Project priority label distribution" in sections
+    assert "data:image/png;base64" in sections
+
+
+def test_build_report_html(tmp_path: Path):
+    for filename in [
+        "gdc_pipeline_schematic.png",
+        "gdc_priority_label_distribution.png",
+        "gdc_modality_coverage_barplot.png",
+        "gdc_project_modality_heatmap_top30.png",
+    ]:
+        write_fake_png(tmp_path / filename)
+
     report = build_report_html(
         project_df=clean_project_inventory(make_project_df()),
         modality_df=clean_modality_matrix(make_modality_df()),
         ranking_df=clean_priority_ranking(make_ranking_df()),
+        figures_dir=tmp_path,
+        embed_images=True,
     )
 
     assert "OpenMultiOmics-Cancer-Atlas" in report
+    assert "Visual overview" in report
     assert "Top-ranked projects" in report
     assert "TCGA-GBM" in report
+    assert "data:image/png;base64" in report
 
 
 def test_generate_gdc_priority_report(tmp_path: Path):
@@ -202,6 +287,16 @@ def test_generate_gdc_priority_report(tmp_path: Path):
     modality_path = tmp_path / "modality.tsv"
     ranking_path = tmp_path / "ranking.tsv"
     output_path = tmp_path / "report.html"
+    figures_dir = tmp_path / "figures"
+    figures_dir.mkdir()
+
+    for filename in [
+        "gdc_pipeline_schematic.png",
+        "gdc_priority_label_distribution.png",
+        "gdc_modality_coverage_barplot.png",
+        "gdc_project_modality_heatmap_top30.png",
+    ]:
+        write_fake_png(figures_dir / filename)
 
     make_project_df().to_csv(project_path, sep="\t", index=False)
     make_modality_df().to_csv(modality_path, sep="\t", index=False)
@@ -211,9 +306,12 @@ def test_generate_gdc_priority_report(tmp_path: Path):
         project_inventory_path=project_path,
         modality_matrix_path=modality_path,
         priority_ranking_path=ranking_path,
+        figures_dir=figures_dir,
         output_path=output_path,
+        embed_images=True,
     )
 
     assert output_path.exists()
     assert "OpenMultiOmics-Cancer-Atlas" in report
     assert "TCGA-LUAD" in report
+    assert "data:image/png;base64" in report
