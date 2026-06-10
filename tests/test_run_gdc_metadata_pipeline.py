@@ -182,3 +182,21 @@ def test_run_gdc_metadata_pipeline_report_only_with_monkeypatch(tmp_path: Path, 
     assert results[0].status == "skipped_existing"
     assert results[1].status == "skipped_existing"
     assert results[-1].step_name == "priority_html_report"
+def test_apply_dev_output_paths():
+    from core.pipelines.run_gdc_metadata_pipeline import (
+        apply_dev_output_paths,
+        build_arg_parser,
+    )
+
+    parser = build_arg_parser()
+    args = parser.parse_args(["--dev-output"])
+
+    updated = apply_dev_output_paths(args)
+
+    assert updated.project_inventory.as_posix() == "outputs/dev/gdc_project_inventory.tsv"
+    assert updated.file_counts.as_posix() == "outputs/dev/gdc_file_counts_by_project.tsv"
+    assert updated.modality_matrix.as_posix() == "outputs/dev/gdc_project_modality_matrix.tsv"
+    assert updated.priority_ranking.as_posix() == "outputs/dev/gdc_project_priority_ranking.tsv"
+    assert updated.figures_dir.as_posix() == "outputs/dev/figures"
+    assert updated.report.as_posix() == "outputs/dev/gdc_project_priority_report.html"
+    assert updated.summary.as_posix() == "outputs/dev/gdc_metadata_pipeline_summary.tsv"

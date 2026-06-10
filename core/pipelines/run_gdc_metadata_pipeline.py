@@ -18,13 +18,17 @@ Pipeline steps:
     6. Generate GDC priority HTML report
 
 Examples:
+    # Full official run
     python -m core.pipelines.run_gdc_metadata_pipeline
 
-    python -m core.pipelines.run_gdc_metadata_pipeline --project-limit 5
+    # Fast development run without overwriting official outputs
+    python -m core.pipelines.run_gdc_metadata_pipeline --project-limit 5 --dev-output
 
-    python -m core.pipelines.run_gdc_metadata_pipeline --skip-file-counts
-
+    # Reuse existing official file counts and regenerate downstream report
     python -m core.pipelines.run_gdc_metadata_pipeline --report-only --open-report
+
+    # Reuse existing official file counts but regenerate report without embedding images
+    python -m core.pipelines.run_gdc_metadata_pipeline --report-only --link-images
 """
 
 from __future__ import annotations
@@ -70,7 +74,9 @@ DEFAULT_SUMMARY_OUTPUT = Path("outputs/reports/gdc_metadata_pipeline_summary.tsv
 
 @dataclass
 class PipelineStepResult:
-    """Metadata for one pipeline step."""
+    """
+    Metadata for one pipeline step.
+    """
 
     step_name: str
     status: str
@@ -80,7 +86,9 @@ class PipelineStepResult:
 
 
 def format_seconds(seconds: float) -> str:
-    """Format elapsed seconds in a compact readable form."""
+    """
+    Format elapsed seconds in a compact readable form.
+    """
     if seconds < 60:
         return f"{seconds:.1f}s"
 
@@ -112,7 +120,9 @@ def count_tsv_rows(path: Path) -> Optional[int]:
 
 
 def ensure_required_file(path: Path, description: str) -> None:
-    """Raise FileNotFoundError if a required file is missing."""
+    """
+    Raise FileNotFoundError if a required file is missing.
+    """
     if not path.exists():
         raise FileNotFoundError(
             f"Required {description} not found: {path}. "
@@ -121,7 +131,9 @@ def ensure_required_file(path: Path, description: str) -> None:
 
 
 def dataframe_row_count(df: pd.DataFrame) -> int:
-    """Return DataFrame row count safely."""
+    """
+    Return DataFrame row count safely.
+    """
     if df is None:
         return 0
 
@@ -135,7 +147,9 @@ def make_result(
     row_count: Optional[int],
     elapsed_seconds: float,
 ) -> PipelineStepResult:
-    """Create a pipeline step result."""
+    """
+    Create a pipeline step result.
+    """
     return PipelineStepResult(
         step_name=step_name,
         status=status,
@@ -146,7 +160,9 @@ def make_result(
 
 
 def build_pipeline_summary_table(results: List[PipelineStepResult]) -> pd.DataFrame:
-    """Convert pipeline results into a summary table."""
+    """
+    Convert pipeline results into a summary table.
+    """
     rows = []
 
     for result in results:
@@ -167,14 +183,18 @@ def write_pipeline_summary(
     results: List[PipelineStepResult],
     output_path: Path,
 ) -> None:
-    """Write pipeline summary TSV."""
+    """
+    Write pipeline summary TSV.
+    """
     output_path.parent.mkdir(parents=True, exist_ok=True)
     summary_df = build_pipeline_summary_table(results)
     summary_df.to_csv(output_path, sep="\t", index=False)
 
 
 def print_pipeline_summary(results: List[PipelineStepResult]) -> None:
-    """Print readable pipeline summary."""
+    """
+    Print readable pipeline summary.
+    """
     print("\nGDC metadata pipeline summary:")
 
     for result in results:
@@ -194,7 +214,9 @@ def run_project_inventory_step(
     size: int,
     timeout: int,
 ) -> PipelineStepResult:
-    """Run the GDC project inventory step."""
+    """
+    Run the GDC project inventory step.
+    """
     start = time.time()
 
     df = build_gdc_project_inventory(
@@ -222,7 +244,9 @@ def run_file_counts_step(
     timeout: int,
     sleep_seconds: float,
 ) -> PipelineStepResult:
-    """Run the GDC file counts by project step."""
+    """
+    Run the GDC file counts by project step.
+    """
     start = time.time()
 
     df = build_gdc_file_counts_by_project(
@@ -249,7 +273,9 @@ def run_modality_matrix_step(
     input_path: Path,
     output_path: Path,
 ) -> PipelineStepResult:
-    """Run the GDC project modality matrix step."""
+    """
+    Run the GDC project modality matrix step.
+    """
     start = time.time()
 
     df = build_gdc_project_modality_matrix(
@@ -273,7 +299,9 @@ def run_priority_ranking_step(
     modality_matrix_path: Path,
     output_path: Path,
 ) -> PipelineStepResult:
-    """Run the GDC project priority ranking step."""
+    """
+    Run the GDC project priority ranking step.
+    """
     start = time.time()
 
     df = build_gdc_project_priority_ranking(
@@ -300,7 +328,9 @@ def run_visuals_step(
     figures_dir: Path,
     top_n: int,
 ) -> PipelineStepResult:
-    """Run the GDC visual generation step."""
+    """
+    Run the GDC visual generation step.
+    """
     start = time.time()
 
     outputs = generate_gdc_priority_visuals(
@@ -330,7 +360,9 @@ def run_report_step(
     output_path: Path,
     embed_images: bool,
 ) -> PipelineStepResult:
-    """Run the GDC HTML report generation step."""
+    """
+    Run the GDC HTML report generation step.
+    """
     start = time.time()
 
     html_report = generate_gdc_priority_report(
@@ -357,7 +389,9 @@ def skipped_existing_result(
     step_name: str,
     output_path: Path,
 ) -> PipelineStepResult:
-    """Record a skipped step that reuses an existing file."""
+    """
+    Record a skipped step that reuses an existing file.
+    """
     return make_result(
         step_name=step_name,
         status="skipped_existing",
@@ -371,7 +405,9 @@ def skipped_result(
     step_name: str,
     output_path: Path,
 ) -> PipelineStepResult:
-    """Record a skipped step."""
+    """
+    Record a skipped step.
+    """
     return make_result(
         step_name=step_name,
         status="skipped",
@@ -403,7 +439,9 @@ def run_gdc_metadata_pipeline(
     link_images: bool = False,
     open_report: bool = False,
 ) -> List[PipelineStepResult]:
-    """Run the full or partial GDC metadata pipeline."""
+    """
+    Run the full or partial GDC metadata pipeline.
+    """
     results: List[PipelineStepResult] = []
 
     if report_only:
@@ -522,8 +560,30 @@ def run_gdc_metadata_pipeline(
     return results
 
 
+def apply_dev_output_paths(args: argparse.Namespace) -> argparse.Namespace:
+    """
+    Redirect all generated outputs to outputs/dev/.
+
+    This protects full official outputs from accidental overwrite during
+    project-limited development runs.
+    """
+    dev_dir = Path("outputs/dev")
+
+    args.project_inventory = dev_dir / "gdc_project_inventory.tsv"
+    args.file_counts = dev_dir / "gdc_file_counts_by_project.tsv"
+    args.modality_matrix = dev_dir / "gdc_project_modality_matrix.tsv"
+    args.priority_ranking = dev_dir / "gdc_project_priority_ranking.tsv"
+    args.figures_dir = dev_dir / "figures"
+    args.report = dev_dir / "gdc_project_priority_report.html"
+    args.summary = dev_dir / "gdc_metadata_pipeline_summary.tsv"
+
+    return args
+
+
 def build_arg_parser() -> argparse.ArgumentParser:
-    """Build CLI parser."""
+    """
+    Build CLI parser.
+    """
     parser = argparse.ArgumentParser(
         description="Run the OpenMultiOmics GDC metadata pipeline end-to-end."
     )
@@ -661,13 +721,27 @@ def build_arg_parser() -> argparse.ArgumentParser:
         help="Open HTML report after generation.",
     )
 
+    parser.add_argument(
+        "--dev-output",
+        action="store_true",
+        help=(
+            "Write all generated outputs to outputs/dev/ instead of official "
+            "output locations. Recommended for --project-limit test runs."
+        ),
+    )
+
     return parser
 
 
 def main(argv: Optional[List[str]] = None) -> int:
-    """CLI entrypoint."""
+    """
+    CLI entrypoint.
+    """
     parser = build_arg_parser()
     args = parser.parse_args(argv)
+
+    if args.dev_output:
+        args = apply_dev_output_paths(args)
 
     try:
         run_gdc_metadata_pipeline(
