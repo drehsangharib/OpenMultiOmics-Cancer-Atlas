@@ -75,3 +75,6 @@ outputs/reports/*
 # Generated figures
 outputs/figures/*
 !outputs/figures/.gitkeep
+
+# Generated development pipeline outputs
+outputs/dev/
