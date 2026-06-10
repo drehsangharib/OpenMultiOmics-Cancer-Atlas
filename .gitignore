@@ -81,3 +81,6 @@ outputs/dev/
 
 # Generated development pipeline outputs
 outputs/dev/
+
+# Generated subset exports
+outputs/subsets/
