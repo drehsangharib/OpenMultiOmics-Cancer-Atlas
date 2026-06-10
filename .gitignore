@@ -78,3 +78,6 @@ outputs/figures/*
 
 # Generated development pipeline outputs
 outputs/dev/
+
+# Generated development pipeline outputs
+outputs/dev/
