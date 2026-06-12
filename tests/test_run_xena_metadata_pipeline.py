@@ -124,3 +124,73 @@ def test_run_xena_metadata_pipeline_with_monkeypatch(tmp_path: Path, monkeypatch
     assert summary_output.exists()
     assert inventory_df.shape[0] == 3
     assert not summary_df.empty
+
+
+
+def test_build_arg_parser_report_flags():
+    parser = build_arg_parser()
+    args = parser.parse_args(
+        [
+            "--recommended-only",
+            "--make-report",
+            "--open-report",
+            "--report-title",
+            "Demo Xena Report",
+        ]
+    )
+
+    assert args.recommended_only is True
+    assert args.make_report is True
+    assert args.open_report is True
+    assert args.report_title == "Demo Xena Report"
+
+
+def test_run_xena_metadata_pipeline_make_report_with_monkeypatch(tmp_path: Path, monkeypatch):
+    inventory_output = tmp_path / "xena_dataset_inventory.tsv"
+    summary_output = tmp_path / "xena_metadata_pipeline_summary.tsv"
+    report_output = tmp_path / "xena_dataset_inventory_report.html"
+
+    def fake_write_xena_dataset_inventory(
+        output_path,
+        hub_ids=None,
+        recommended_only=False,
+        min_priority=None,
+        timeout=60,
+        sleep_seconds=0.0,
+        allow_failures=True,
+    ):
+        df = make_inventory_df()
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        df.to_csv(output_path, sep="\t", index=False)
+        return df
+
+    def fake_generate_report(input_path, output_path, title):
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        output_path.write_text(f"<html><title>{title}</title></html>", encoding="utf-8")
+        return output_path.read_text(encoding="utf-8")
+
+    monkeypatch.setattr(
+        "core.pipelines.run_xena_metadata_pipeline.write_xena_dataset_inventory",
+        fake_write_xena_dataset_inventory,
+    )
+
+    monkeypatch.setattr(
+        "core.pipelines.run_xena_metadata_pipeline.generate_xena_dataset_inventory_report",
+        fake_generate_report,
+    )
+
+    inventory_df, summary_df = run_xena_metadata_pipeline(
+        output_path=inventory_output,
+        summary_path=summary_output,
+        report_path=report_output,
+        report_title="Demo Xena Report",
+        recommended_only=True,
+        make_report=True,
+        open_report=False,
+    )
+
+    assert inventory_output.exists()
+    assert summary_output.exists()
+    assert report_output.exists()
+    assert inventory_df.shape[0] == 3
+    assert "report_generated" in set(summary_df["name"])

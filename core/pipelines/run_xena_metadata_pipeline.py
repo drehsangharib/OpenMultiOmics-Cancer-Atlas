@@ -9,16 +9,23 @@ Project:
 Purpose:
     Run the UCSC Xena metadata-only dataset inventory workflow with one command.
 
-This pipeline wraps core.search.xena_dataset_inventory and writes:
+This pipeline wraps core.search.xena_dataset_inventory and can write:
     1. Live Xena dataset inventory TSV
     2. Xena metadata pipeline summary TSV
+    3. Optional Xena dataset inventory HTML report
 
 The pipeline does not download molecular matrices. It only queries dataset
 metadata from selected Xena hubs.
 
 Examples:
     python -m core.pipelines.run_xena_metadata_pipeline --recommended-only
+
+    python -m core.pipelines.run_xena_metadata_pipeline --recommended-only --make-report
+
+    python -m core.pipelines.run_xena_metadata_pipeline --recommended-only --make-report --open-report
+
     python -m core.pipelines.run_xena_metadata_pipeline --hub-id gdc_xena
+
     python -m core.pipelines.run_xena_metadata_pipeline --hub-id gdc_xena --hub-id tcga_xena
 """
 
@@ -27,11 +34,16 @@ from __future__ import annotations
 import argparse
 import sys
 import time
+import webbrowser
 from pathlib import Path
 from typing import Iterable, List, Optional, Tuple
 
 import pandas as pd
 
+from core.reporting.xena_dataset_inventory_report import (
+    DEFAULT_OUTPUT as DEFAULT_XENA_REPORT_OUTPUT,
+    generate_xena_dataset_inventory_report,
+)
 from core.search.xena_dataset_inventory import (
     DEFAULT_OUTPUT as DEFAULT_XENA_DATASET_INVENTORY,
     write_xena_dataset_inventory,
@@ -73,6 +85,7 @@ def safe_count_by_column(df: pd.DataFrame, column: str) -> pd.DataFrame:
     value_counts = df[column].fillna("").astype(str).value_counts()
 
     rows = []
+
     for name, count in value_counts.items():
         rows.append(
             {
@@ -88,6 +101,8 @@ def safe_count_by_column(df: pd.DataFrame, column: str) -> pd.DataFrame:
 def build_xena_pipeline_summary_table(
     inventory_df: pd.DataFrame,
     elapsed_seconds: float = 0.0,
+    report_path: Optional[Path] = None,
+    report_generated: bool = False,
 ) -> pd.DataFrame:
     """
     Build summary table for a Xena metadata pipeline run.
@@ -114,7 +129,21 @@ def build_xena_pipeline_summary_table(
             "name": "elapsed_seconds_rounded",
             "count": round(float(elapsed_seconds), 3),
         },
+        {
+            "summary_type": "pipeline_metric",
+            "name": "report_generated",
+            "count": int(bool(report_generated)),
+        },
     ]
+
+    if report_path is not None:
+        summary_rows.append(
+            {
+                "summary_type": "pipeline_output",
+                "name": "report_path",
+                "count": str(report_path),
+            }
+        )
 
     summary_df = pd.DataFrame(summary_rows)
 
@@ -140,6 +169,8 @@ def write_xena_pipeline_summary(
     inventory_df: pd.DataFrame,
     summary_path: Path = DEFAULT_SUMMARY_OUTPUT,
     elapsed_seconds: float = 0.0,
+    report_path: Optional[Path] = None,
+    report_generated: bool = False,
 ) -> pd.DataFrame:
     """
     Write Xena metadata pipeline summary TSV.
@@ -147,6 +178,8 @@ def write_xena_pipeline_summary(
     summary_df = build_xena_pipeline_summary_table(
         inventory_df=inventory_df,
         elapsed_seconds=elapsed_seconds,
+        report_path=report_path,
+        report_generated=report_generated,
     )
 
     summary_path.parent.mkdir(parents=True, exist_ok=True)
@@ -161,6 +194,8 @@ def print_xena_pipeline_summary(
     output_path: Path,
     summary_path: Path,
     elapsed_seconds: float,
+    report_path: Optional[Path] = None,
+    report_generated: bool = False,
 ) -> None:
     """
     Print readable Xena metadata pipeline summary.
@@ -170,6 +205,9 @@ def print_xena_pipeline_summary(
     print(f"  elapsed_time: {format_seconds(elapsed_seconds)}")
     print(f"  dataset_inventory_output: {output_path}")
     print(f"  summary_output: {summary_path}")
+
+    if report_generated and report_path is not None:
+        print(f"  report_output: {report_path}")
 
     if not inventory_df.empty and "hub_id" in inventory_df.columns:
         print("\nRows by hub:")
@@ -184,6 +222,7 @@ def print_xena_pipeline_summary(
             print(f"  {modality}: {count}")
 
     query_error_rows = 0
+
     if "integration_stage" in inventory_df.columns:
         query_error_rows = int((inventory_df["integration_stage"] == "query_error").sum())
 
@@ -193,12 +232,16 @@ def print_xena_pipeline_summary(
 def run_xena_metadata_pipeline(
     output_path: Path = DEFAULT_XENA_DATASET_INVENTORY,
     summary_path: Path = DEFAULT_SUMMARY_OUTPUT,
+    report_path: Path = DEFAULT_XENA_REPORT_OUTPUT,
+    report_title: str = "UCSC Xena Dataset Inventory Report",
     hub_ids: Optional[Iterable[str]] = None,
     recommended_only: bool = False,
     min_priority: Optional[int] = None,
     timeout: int = 60,
     sleep_seconds: float = 0.0,
     strict: bool = False,
+    make_report: bool = False,
+    open_report: bool = False,
 ) -> Tuple[pd.DataFrame, pd.DataFrame]:
     """
     Run Xena metadata-only dataset inventory pipeline.
@@ -215,12 +258,24 @@ def run_xena_metadata_pipeline(
         allow_failures=not strict,
     )
 
+    report_generated = False
+
+    if make_report:
+        generate_xena_dataset_inventory_report(
+            input_path=output_path,
+            output_path=report_path,
+            title=report_title,
+        )
+        report_generated = True
+
     elapsed = time.time() - start
 
     summary_df = write_xena_pipeline_summary(
         inventory_df=inventory_df,
         summary_path=summary_path,
         elapsed_seconds=elapsed,
+        report_path=report_path if make_report else None,
+        report_generated=report_generated,
     )
 
     print_xena_pipeline_summary(
@@ -229,7 +284,12 @@ def run_xena_metadata_pipeline(
         output_path=output_path,
         summary_path=summary_path,
         elapsed_seconds=elapsed,
+        report_path=report_path if make_report else None,
+        report_generated=report_generated,
     )
+
+    if open_report and make_report and report_path.exists():
+        webbrowser.open(report_path.resolve().as_uri())
 
     return inventory_df, summary_df
 
@@ -254,6 +314,19 @@ def build_arg_parser() -> argparse.ArgumentParser:
         type=Path,
         default=DEFAULT_SUMMARY_OUTPUT,
         help=f"Output Xena metadata pipeline summary TSV. Default: {DEFAULT_SUMMARY_OUTPUT}",
+    )
+
+    parser.add_argument(
+        "--report",
+        type=Path,
+        default=DEFAULT_XENA_REPORT_OUTPUT,
+        help=f"Output Xena dataset inventory HTML report. Default: {DEFAULT_XENA_REPORT_OUTPUT}",
+    )
+
+    parser.add_argument(
+        "--report-title",
+        default="UCSC Xena Dataset Inventory Report",
+        help="HTML report title.",
     )
 
     parser.add_argument(
@@ -296,6 +369,18 @@ def build_arg_parser() -> argparse.ArgumentParser:
         help="Fail immediately if any hub query fails.",
     )
 
+    parser.add_argument(
+        "--make-report",
+        action="store_true",
+        help="Generate Xena dataset inventory HTML report after inventory creation.",
+    )
+
+    parser.add_argument(
+        "--open-report",
+        action="store_true",
+        help="Open generated Xena dataset inventory HTML report. Requires --make-report.",
+    )
+
     return parser
 
 
@@ -310,12 +395,16 @@ def main(argv: Optional[List[str]] = None) -> int:
         run_xena_metadata_pipeline(
             output_path=args.output,
             summary_path=args.summary,
+            report_path=args.report,
+            report_title=args.report_title,
             hub_ids=args.hub_id,
             recommended_only=args.recommended_only,
             min_priority=args.min_priority,
             timeout=args.timeout,
             sleep_seconds=args.sleep_seconds,
             strict=args.strict,
+            make_report=args.make_report,
+            open_report=args.open_report,
         )
     except Exception as exc:
         print(f"ERROR: Xena metadata pipeline failed: {exc}", file=sys.stderr)
