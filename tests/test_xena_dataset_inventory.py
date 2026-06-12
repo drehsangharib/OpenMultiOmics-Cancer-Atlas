@@ -172,3 +172,29 @@ def test_write_xena_dataset_inventory(tmp_path: Path, monkeypatch):
     loaded = pd.read_csv(output_path, sep="\t")
     assert loaded.shape[0] == df.shape[0]
     assert "dataset_id" in loaded.columns
+
+
+def test_infer_extended_xena_data_categories():
+    assert infer_data_category("PanCan33_ssGSEA_1387GeneSets_NonZero_sample_level.txt") == "pathway activity"
+    assert infer_data_category("StemnessScores_RNAexp_20170127.2.tsv") == "transcriptomic signature"
+    assert infer_data_category("StemnessScores_DNAmeth_20170210.tsv") == "methylation signature"
+    assert infer_data_category("TCGA.HRD_withSampleID.txt") == "genomic instability"
+    assert infer_data_category("broad.mit.edu_PANCAN_Genome_Wide_SNP_6_whitelisted.gene.xena") == "copy number"
+    assert infer_data_category("mc3.v0.2.8.PUBLIC.nonsilentGene.xena") == "somatic mutation"
+    assert infer_data_category("pancanMiRs_EBadjOnProtocolPlatformWithoutRepsWithUnCorrectMiRs_08_04_16.xena") == "miRNA expression"
+    assert infer_data_category("probeMap/hugo_gencode_good_hg19_V24lift37_probemap") == "annotation map"
+
+
+def test_infer_extended_xena_modalities():
+    assert infer_omics_modality("PanCan33_ssGSEA_1387GeneSets_NonZero_sample_level.txt") == "functional_signature"
+    assert infer_omics_modality("StemnessScores_RNAexp_20170127.2.tsv") == "transcriptomics"
+    assert infer_omics_modality("StemnessScores_DNAmeth_20170210.tsv") == "methylation"
+    assert infer_omics_modality("TCGA.HRD_withSampleID.txt") == "genomic_signature"
+    assert infer_omics_modality("probeMap/hugo_gencode_good_hg19_V24lift37_probemap") == "annotation_map"
+
+
+def test_infer_extended_xena_matrix_types():
+    assert infer_matrix_type("PanCan33_ssGSEA_1387GeneSets_NonZero_sample_level.txt") == "sample-by-signature score matrix"
+    assert infer_matrix_type("StemnessScores_RNAexp_20170127.2.tsv") == "sample-by-signature score matrix"
+    assert infer_matrix_type("TCGA.HRD_withSampleID.txt") == "sample-by-genomic-signature score matrix"
+    assert infer_matrix_type("probeMap/hugo_gencode_good_hg19_V24lift37_probemap") == "feature annotation map"

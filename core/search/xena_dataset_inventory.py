@@ -192,21 +192,38 @@ def query_xena_hub_datasets(
     raise RuntimeError("All Xena dataset-list queries failed: " + " ; ".join(errors))
 
 
+
 def infer_data_category(dataset_text: str) -> str:
     """
     Infer broad data category from dataset identifier/name text.
-
-    Note:
-        Xena dataset paths often contain sampleMap, but sampleMap is not itself
-        a clinical/phenotype marker. The assay-specific suffix determines the
-        category, e.g. HiSeqV2, clinicalMatrix, Gistic2_CopyNumber.
     """
     text = normalize_lower(dataset_text)
+
+    if any(token in text for token in ["probemap", "probe_map", "genemap", "gene_map"]):
+        return "annotation map"
 
     if any(token in text for token in ["clinical", "phenotype", "survival", "clinicalmatrix"]):
         return "clinical phenotype"
 
-    if any(token in text for token in ["mirna", "mi-rna", "micro_rna"]):
+    if any(token in text for token in ["immune", "immunesig", "immunesigs"]):
+        return "immune signature"
+
+    if any(token in text for token in ["ssgsea", "gsva", "geneset", "genesets", "gene_set"]):
+        return "pathway activity"
+
+    if any(token in text for token in ["drugtarget", "drug_target", "geneprogram", "gene_program"]):
+        return "pathway or target signature"
+
+    if "stemness" in text and any(token in text for token in ["rna", "rnaseq", "rnaexp"]):
+        return "transcriptomic signature"
+
+    if "stemness" in text and any(token in text for token in ["dna", "meth", "methyl", "dnameth"]):
+        return "methylation signature"
+
+    if any(token in text for token in ["hrd", "homologous_recombination", "genomic_instability"]):
+        return "genomic instability"
+
+    if any(token in text for token in ["mirna", "mi-rna", "micro_rna", "mirs"]):
         return "miRNA expression"
 
     if any(
@@ -220,18 +237,44 @@ def infer_data_category(dataset_text: str) -> str:
             "fpkm",
             "htseq",
             "gene expression",
+            "geneexp",
+            "rnaexp",
             "expression",
         ]
     ):
         return "gene expression"
 
-    if any(token in text for token in ["methyl", "methy"]):
+    if any(token in text for token in ["methyl", "methy", "dnameth"]):
         return "DNA methylation"
 
-    if any(token in text for token in ["copy", "cnv", "gistic", "cna", "segment"]):
+    if any(
+        token in text
+        for token in [
+            "copy",
+            "cnv",
+            "cna",
+            "gistic",
+            "segment",
+            "snp_6",
+            "snp6",
+            "genome_wide_snp",
+        ]
+    ):
         return "copy number"
 
-    if any(token in text for token in ["mutation", "mut", "maf", "snv", "variant"]):
+    if any(
+        token in text
+        for token in [
+            "mutation",
+            "mut",
+            "maf",
+            "snv",
+            "variant",
+            "mc3",
+            "nonsilent",
+            "non_silent",
+        ]
+    ):
         return "somatic mutation"
 
     if any(token in text for token in ["protein", "proteome", "rppa", "phospho"]):
@@ -240,7 +283,7 @@ def infer_data_category(dataset_text: str) -> str:
     if any(token in text for token in ["atac", "peak", "chromatin"]):
         return "chromatin accessibility"
 
-    if any(token in text for token in ["subtype", "cluster", "annotation"]):
+    if any(token in text for token in ["subtype", "cluster", "icluster", "annotation"]):
         return "subtype annotation"
 
     return "unknown"
@@ -255,10 +298,10 @@ def infer_omics_modality(dataset_text: str) -> str:
     if category in {"clinical phenotype", "subtype annotation"}:
         return "clinical_annotation"
 
-    if category in {"gene expression", "miRNA expression"}:
+    if category in {"gene expression", "miRNA expression", "transcriptomic signature"}:
         return "transcriptomics"
 
-    if category == "DNA methylation":
+    if category in {"DNA methylation", "methylation signature"}:
         return "methylation"
 
     if category == "copy number":
@@ -273,6 +316,15 @@ def infer_omics_modality(dataset_text: str) -> str:
     if category == "chromatin accessibility":
         return "chromatin_accessibility"
 
+    if category in {"immune signature", "pathway activity", "pathway or target signature"}:
+        return "functional_signature"
+
+    if category == "genomic instability":
+        return "genomic_signature"
+
+    if category == "annotation map":
+        return "annotation_map"
+
     return "unknown"
 
 
@@ -281,15 +333,22 @@ def infer_matrix_type(dataset_text: str) -> str:
     Infer likely matrix type from dataset identifier/name text.
     """
     modality = infer_omics_modality(dataset_text)
+    category = infer_data_category(dataset_text)
     text = normalize_lower(dataset_text)
 
     if modality == "transcriptomics":
+        if category == "miRNA expression":
+            return "sample-by-miRNA expression matrix"
+        if category == "transcriptomic signature":
+            return "sample-by-signature score matrix"
         return "sample-by-gene expression matrix"
 
     if modality == "clinical_annotation":
         return "sample-by-feature annotation table"
 
     if modality == "methylation":
+        if category == "methylation signature":
+            return "sample-by-signature score matrix"
         return "sample-by-probe methylation matrix"
 
     if modality == "cnv":
@@ -306,8 +365,16 @@ def infer_matrix_type(dataset_text: str) -> str:
     if modality == "chromatin_accessibility":
         return "sample-by-peak accessibility matrix"
 
-    return "unknown"
+    if modality == "functional_signature":
+        return "sample-by-signature score matrix"
 
+    if modality == "genomic_signature":
+        return "sample-by-genomic-signature score matrix"
+
+    if modality == "annotation_map":
+        return "feature annotation map"
+
+    return "unknown"
 
 def infer_resource_family(hub_id: str, hub_row: Dict[str, Any], dataset_text: str) -> str:
     """
