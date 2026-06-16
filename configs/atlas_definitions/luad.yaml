@@ -1,0 +1,18 @@
+atlas_name: luad
+keywords:
+  - luad
+  - lung
+  - adenocarcinoma
+  - tcga-luad
+
+input: outputs/dataset_inventory/unified_public_cancer_omics_inventory.tsv
+output: outputs/atlases/luad/luad_public_omics_atlas_inventory.tsv
+report: outputs/reports/luad_public_omics_atlas_report.html
+
+report_title: LUAD Public Omics Atlas Inventory Report
+min_priority: 3
+allowed_sources:
+  - gdc
+  - xena
+
+make_report: true

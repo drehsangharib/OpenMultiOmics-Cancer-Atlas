@@ -1,0 +1,21 @@
+atlas_name: gbm
+keywords:
+  - gbm
+  - glioblastoma
+  - glioma
+  - brain
+  - lgg
+  - tcga-gbm
+  - tcga-lgg
+
+input: outputs/dataset_inventory/unified_public_cancer_omics_inventory.tsv
+output: outputs/atlases/gbm/gbm_public_omics_atlas_inventory.tsv
+report: outputs/reports/gbm_public_omics_atlas_report.html
+
+report_title: GBM Public Omics Atlas Inventory Report
+min_priority: 3
+allowed_sources:
+  - gdc
+  - xena
+
+make_report: true
