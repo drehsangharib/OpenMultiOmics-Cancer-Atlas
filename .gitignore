@@ -61,9 +61,10 @@ outputs/manuscript/*
 *.d
 
 # Generated outputs
-outputs/dataset_inventory/*
-outputs/ranked_datasets/*
-outputs/reports/*
+outputs/dataset_inventory/
+outputs/ranked_datasets/
+outputs/reports/
+outputs/atlases/
 
 # Keep safe placeholders
 !data/README.md
