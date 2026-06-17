@@ -1,0 +1,23 @@
+gbm:
+  display_name: Glioblastoma
+  short_name: GBM
+  color: "#1f77b4"
+  order: 1
+
+luad:
+  display_name: Lung Adenocarcinoma
+  short_name: LUAD
+  color: "#ff7f0e"
+  order: 2
+
+brca:
+  display_name: Breast Carcinoma
+  short_name: BRCA
+  color: "#e377c2"
+  order: 3
+
+lgg:
+  display_name: Lower Grade Glioma
+  short_name: LGG
+  color: "#2ca02c"
+  order: 4
