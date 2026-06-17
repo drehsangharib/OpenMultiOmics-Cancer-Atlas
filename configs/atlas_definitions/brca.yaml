@@ -1,0 +1,21 @@
+atlas_name: brca
+keywords:
+  - brca
+  - breast
+  - breast cancer
+  - breast carcinoma
+  - tcga-brca
+
+input: outputs/dataset_inventory/unified_public_cancer_omics_inventory.tsv
+output: outputs/atlases/brca/brca_public_omics_atlas_inventory.tsv
+report: outputs/reports/brca_public_omics_atlas_report.html
+qc_report: outputs/reports/brca_public_omics_atlas_qc_report.html
+
+report_title: BRCA Public Omics Atlas Inventory Report
+qc_report_title: BRCA Public Omics Atlas QC Report
+min_priority: 3
+allowed_sources:
+  - gdc
+  - xena
+
+make_report: true

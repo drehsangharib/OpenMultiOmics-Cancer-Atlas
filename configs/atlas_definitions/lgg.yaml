@@ -1,0 +1,22 @@
+atlas_name: lgg
+keywords:
+  - lgg
+  - low grade glioma
+  - low-grade glioma
+  - glioma
+  - brain
+  - tcga-lgg
+
+input: outputs/dataset_inventory/unified_public_cancer_omics_inventory.tsv
+output: outputs/atlases/lgg/lgg_public_omics_atlas_inventory.tsv
+report: outputs/reports/lgg_public_omics_atlas_report.html
+qc_report: outputs/reports/lgg_public_omics_atlas_qc_report.html
+
+report_title: LGG Public Omics Atlas Inventory Report
+qc_report_title: LGG Public Omics Atlas QC Report
+min_priority: 3
+allowed_sources:
+  - gdc
+  - xena
+
+make_report: true
