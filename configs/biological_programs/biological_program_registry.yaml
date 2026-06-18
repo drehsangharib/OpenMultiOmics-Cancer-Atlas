@@ -1,0 +1,55 @@
+programs:
+  expression_state_signal:
+    display_name: Expression state signal
+    modality: transcriptomics
+    interpretation_layer: gene_expression_program
+    description: Transcriptomic features that may represent gene-expression state differences.
+    seed_keywords:
+      - expression
+      - transcript
+      - RNA
+      - gene
+
+  protein_abundance_signal:
+    display_name: Protein abundance signal
+    modality: proteomics
+    interpretation_layer: protein_abundance_program
+    description: Proteomic features that may represent protein abundance or proteogenomic state differences.
+    seed_keywords:
+      - protein
+      - abundance
+      - proteomics
+      - proteome
+
+  epigenetic_state_signal:
+    display_name: Epigenetic state signal
+    modality: epigenome
+    interpretation_layer: methylation_or_epigenetic_program
+    description: Epigenomic features that may represent methylation or chromatin-associated state differences.
+    seed_keywords:
+      - methylation
+      - CpG
+      - epigenetic
+      - chromatin
+
+  metabolic_state_signal:
+    display_name: Metabolic state signal
+    modality: metabolomics
+    interpretation_layer: metabolic_program
+    description: Metabolomic features that may represent metabolic abundance or metabolic-state differences.
+    seed_keywords:
+      - metabolite
+      - metabolism
+      - metabolic
+      - abundance
+
+  cross_modality_state_signal:
+    display_name: Cross-modality state signal
+    modality: multiomics
+    interpretation_layer: integrated_multiomics_program
+    description: Multi-omics signal where more than one modality contributes to a candidate biological state.
+    seed_keywords:
+      - multiomics
+      - integrated
+      - cross-modality
+      - systems
