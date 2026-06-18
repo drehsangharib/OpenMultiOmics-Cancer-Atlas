@@ -1,0 +1,43 @@
+manifest_id: example_transcriptomics_brca_xena
+atlas_name: brca
+modality: transcriptomics
+data_type: gene_expression_matrix
+assay: RNA-seq
+species: human
+source_name: UCSC Xena
+source_url: https://xena.ucsc.edu/
+access_level: public
+license_or_terms: public_resource_terms_apply
+
+input_files:
+  - file_id: expression_matrix
+    path: outputs/example_data/brca_transcriptomics_matrix.tsv
+    file_format: tsv
+    matrix_orientation: samples_by_features
+    sample_id_column: sample_id
+    feature_id_type: gene_symbol
+
+sample_metadata:
+  path: outputs/example_data/brca_sample_metadata.tsv
+  sample_id_column: sample_id
+
+feature_metadata:
+  path: outputs/example_data/brca_gene_metadata.tsv
+  feature_id_column: gene_symbol
+
+processing_plan:
+  normalization: log2_tpm_plus_one
+  missing_value_strategy: median_feature_imputation
+  batch_correction: none
+  feature_filtering: remove_zero_variance_features
+
+expected_outputs:
+  feature_store_dir: outputs/features/transcriptomics/brca
+  normalized_matrix: outputs/features/transcriptomics/brca/normalized_matrix.tsv
+  sample_metadata: outputs/features/transcriptomics/brca/sample_metadata.tsv
+  feature_metadata: outputs/features/transcriptomics/brca/feature_metadata.tsv
+  qc_summary: outputs/features/transcriptomics/brca/qc_summary.tsv
+
+agent_role:
+  stage: modality_preprocessing
+  purpose: prepare transcriptomic features for downstream AI multi-omics analysis

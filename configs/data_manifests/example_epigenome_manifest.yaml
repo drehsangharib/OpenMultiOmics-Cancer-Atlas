@@ -1,0 +1,43 @@
+﻿manifest_id: example_epigenome_gbm_xena
+atlas_name: gbm
+modality: epigenome
+data_type: dna_methylation_matrix
+assay: methylation_array
+species: human
+source_name: UCSC Xena / GDC-derived public resource
+source_url: https://xena.ucsc.edu/
+access_level: public
+license_or_terms: public_resource_terms_apply
+
+input_files:
+  - file_id: methylation_matrix
+    path: outputs/example_data/gbm_methylation_matrix.tsv
+    file_format: tsv
+    matrix_orientation: samples_by_features
+    sample_id_column: sample_id
+    feature_id_type: cpg_probe_id
+
+sample_metadata:
+  path: outputs/example_data/gbm_sample_metadata.tsv
+  sample_id_column: sample_id
+
+feature_metadata:
+  path: outputs/example_data/gbm_cpg_metadata.tsv
+  feature_id_column: cpg_probe_id
+
+processing_plan:
+  normalization: beta_value_clipping
+  missing_value_strategy: median_feature_imputation
+  batch_correction: none
+  feature_filtering: remove_high_missingness_features
+
+expected_outputs:
+  feature_store_dir: outputs/features/epigenome/gbm
+  normalized_matrix: outputs/features/epigenome/gbm/normalized_matrix.tsv
+  sample_metadata: outputs/features/epigenome/gbm/sample_metadata.tsv
+  feature_metadata: outputs/features/epigenome/gbm/feature_metadata.tsv
+  qc_summary: outputs/features/epigenome/gbm/qc_summary.tsv
+
+agent_role:
+  stage: modality_preprocessing
+  purpose: prepare epigenomic features for downstream AI multi-omics analysis

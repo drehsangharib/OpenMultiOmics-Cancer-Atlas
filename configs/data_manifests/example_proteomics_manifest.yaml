@@ -1,0 +1,43 @@
+manifest_id: example_proteomics_luad_cptac
+atlas_name: luad
+modality: proteomics
+data_type: protein_abundance_matrix
+assay: mass_spectrometry
+species: human
+source_name: Proteomic Data Commons / CPTAC
+source_url: https://proteomic.datacommons.cancer.gov/
+access_level: public
+license_or_terms: public_resource_terms_apply
+
+input_files:
+  - file_id: protein_abundance_matrix
+    path: outputs/example_data/luad_proteomics_matrix.tsv
+    file_format: tsv
+    matrix_orientation: samples_by_features
+    sample_id_column: sample_id
+    feature_id_type: protein_accession_or_gene_symbol
+
+sample_metadata:
+  path: outputs/example_data/luad_sample_metadata.tsv
+  sample_id_column: sample_id
+
+feature_metadata:
+  path: outputs/example_data/luad_protein_metadata.tsv
+  feature_id_column: protein_id
+
+processing_plan:
+  normalization: median_centering
+  missing_value_strategy: left_censored_imputation
+  batch_correction: none
+  feature_filtering: remove_features_missing_above_threshold
+
+expected_outputs:
+  feature_store_dir: outputs/features/proteomics/luad
+  normalized_matrix: outputs/features/proteomics/luad/normalized_matrix.tsv
+  sample_metadata: outputs/features/proteomics/luad/sample_metadata.tsv
+  feature_metadata: outputs/features/proteomics/luad/feature_metadata.tsv
+  qc_summary: outputs/features/proteomics/luad/qc_summary.tsv
+
+agent_role:
+  stage: modality_preprocessing
+  purpose: prepare proteomic features for downstream AI multi-omics analysis

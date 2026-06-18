@@ -1,0 +1,43 @@
+manifest_id: example_metabolomics_public_placeholder
+atlas_name: multi_cancer
+modality: metabolomics
+data_type: metabolite_abundance_matrix
+assay: mass_spectrometry_or_nmr
+species: human
+source_name: public_metabolomics_repository_placeholder
+source_url: https://www.ebi.ac.uk/metabolights/
+access_level: public_or_user_supplied
+license_or_terms: public_resource_terms_apply
+
+input_files:
+  - file_id: metabolite_abundance_matrix
+    path: outputs/example_data/metabolomics_matrix.tsv
+    file_format: tsv
+    matrix_orientation: samples_by_features
+    sample_id_column: sample_id
+    feature_id_type: metabolite_name_or_identifier
+
+sample_metadata:
+  path: outputs/example_data/metabolomics_sample_metadata.tsv
+  sample_id_column: sample_id
+
+feature_metadata:
+  path: outputs/example_data/metabolite_metadata.tsv
+  feature_id_column: metabolite_id
+
+processing_plan:
+  normalization: log_transform_then_scale
+  missing_value_strategy: half_minimum_imputation
+  batch_correction: none
+  feature_filtering: remove_high_missingness_features
+
+expected_outputs:
+  feature_store_dir: outputs/features/metabolomics/multi_cancer
+  normalized_matrix: outputs/features/metabolomics/multi_cancer/normalized_matrix.tsv
+  sample_metadata: outputs/features/metabolomics/multi_cancer/sample_metadata.tsv
+  feature_metadata: outputs/features/metabolomics/multi_cancer/feature_metadata.tsv
+  qc_summary: outputs/features/metabolomics/multi_cancer/qc_summary.tsv
+
+agent_role:
+  stage: modality_preprocessing
+  purpose: prepare metabolomic features for downstream AI multi-omics analysis
