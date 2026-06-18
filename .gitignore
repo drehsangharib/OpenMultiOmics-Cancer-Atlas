@@ -66,6 +66,8 @@ outputs/ranked_datasets/
 outputs/reports/
 outputs/atlases/
 outputs/releases/
+outputs/example_data/
+outputs/features/
 
 # Keep safe placeholders
 !data/README.md
