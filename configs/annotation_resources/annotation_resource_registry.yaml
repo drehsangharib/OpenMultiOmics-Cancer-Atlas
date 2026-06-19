@@ -1,0 +1,25 @@
+resources:
+  gene_program_seed:
+    display_name: Gene/protein seed annotation scaffold
+    entity_type: gene_or_protein
+    supported_modalities:
+      - transcriptomics
+      - proteomics
+    resource_type: local_seed_mapping
+    description: Local scaffold for mapping gene/protein-like features to biological programs.
+
+  cpg_program_seed:
+    display_name: CpG/epigenome seed annotation scaffold
+    entity_type: cpg_probe_or_epigenomic_feature
+    supported_modalities:
+      - epigenome
+    resource_type: local_seed_mapping
+    description: Local scaffold for mapping CpG/epigenomic features to biological programs.
+
+  metabolite_program_seed:
+    display_name: Metabolite seed annotation scaffold
+    entity_type: metabolite_or_metabolic_feature
+    supported_modalities:
+      - metabolomics
+    resource_type: local_seed_mapping
+    description: Local scaffold for mapping metabolomic features to biological programs.
