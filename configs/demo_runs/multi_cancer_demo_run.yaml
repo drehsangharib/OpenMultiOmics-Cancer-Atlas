@@ -1,0 +1,14 @@
+demo_run_id: multi_cancer_demo_end_to_end
+atlas_name: multi_cancer_demo
+purpose: End-to-end demo run from modality feature stores to external annotation evidence scaffold.
+feature_store_manifests:
+  - outputs/features/transcriptomics/brca/feature_store_manifest.yaml
+  - outputs/features/proteomics/luad/feature_store_manifest.yaml
+  - outputs/features/epigenome/gbm/feature_store_manifest.yaml
+  - outputs/features/metabolomics/multi_cancer/feature_store_manifest.yaml
+expected_outputs:
+  integrated_root: outputs/features/integrated
+  final_report_dir: outputs/reports/end_to_end_demo
+agent_role:
+  stage: end_to_end_platform_demonstration
+  purpose: demonstrate the platform path from modality feature stores to AI-ready biological interpretation evidence.
