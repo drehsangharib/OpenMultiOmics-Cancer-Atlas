@@ -1,0 +1,26 @@
+connectors:
+  pathway_database_adapter:
+    display_name: Pathway database adapter scaffold
+    connector_type: local_or_external_pathway_resource
+    status: scaffold
+    supported_entity_types:
+      - gene_or_transcript
+      - gene_or_protein
+      - cpg_probe_or_epigenomic_feature
+      - metabolite_or_metabolic_feature
+    expected_input_table: feature_evidence_table.tsv
+    expected_output_table: external_annotation_evidence.tsv
+    description: Adapter scaffold for future integration with curated pathway, ontology, gene-set, protein, methylation, and metabolite resources.
+
+  ontology_evidence_adapter:
+    display_name: Ontology evidence adapter scaffold
+    connector_type: local_or_external_ontology_resource
+    status: scaffold
+    supported_entity_types:
+      - biological_program
+      - biological_process
+      - molecular_function
+      - pathway
+    expected_input_table: pathway_prioritization_table.tsv
+    expected_output_table: ontology_evidence_summary.tsv
+    description: Adapter scaffold for future ontology-based biological interpretation and evidence scoring.

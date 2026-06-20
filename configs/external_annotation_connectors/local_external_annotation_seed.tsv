@@ -1,0 +1,13 @@
+pathway_ready_entity_id	entity_type	external_resource_id	external_resource_name	external_term_id	external_term_name	evidence_type	evidence_strength
+GENE1	gene_or_transcript	LOCAL_PATHWAY_SEED	Local pathway seed	LPW_EXPR_001	Expression state program	seed_scaffold	0.80
+GENE2	gene_or_transcript	LOCAL_PATHWAY_SEED	Local pathway seed	LPW_EXPR_001	Expression state program	seed_scaffold	0.75
+GENE3	gene_or_transcript	LOCAL_PATHWAY_SEED	Local pathway seed	LPW_EXPR_001	Expression state program	seed_scaffold	0.70
+PROT1	gene_or_protein	LOCAL_PATHWAY_SEED	Local pathway seed	LPW_PROT_001	Protein abundance program	seed_scaffold	0.80
+PROT2	gene_or_protein	LOCAL_PATHWAY_SEED	Local pathway seed	LPW_PROT_001	Protein abundance program	seed_scaffold	0.75
+PROT3	gene_or_protein	LOCAL_PATHWAY_SEED	Local pathway seed	LPW_PROT_001	Protein abundance program	seed_scaffold	0.70
+CG0001	cpg_probe_or_epigenomic_feature	LOCAL_PATHWAY_SEED	Local pathway seed	LPW_EPI_001	Epigenetic state program	seed_scaffold	0.80
+CG0002	cpg_probe_or_epigenomic_feature	LOCAL_PATHWAY_SEED	Local pathway seed	LPW_EPI_001	Epigenetic state program	seed_scaffold	0.75
+CG0003	cpg_probe_or_epigenomic_feature	LOCAL_PATHWAY_SEED	Local pathway seed	LPW_EPI_001	Epigenetic state program	seed_scaffold	0.70
+MET1	metabolite_or_metabolic_feature	LOCAL_PATHWAY_SEED	Local pathway seed	LPW_MET_001	Metabolic state program	seed_scaffold	0.80
+MET2	metabolite_or_metabolic_feature	LOCAL_PATHWAY_SEED	Local pathway seed	LPW_MET_001	Metabolic state program	seed_scaffold	0.75
+MET3	metabolite_or_metabolic_feature	LOCAL_PATHWAY_SEED	Local pathway seed	LPW_MET_001	Metabolic state program	seed_scaffold	0.70
