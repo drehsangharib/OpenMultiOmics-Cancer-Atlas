@@ -1,0 +1,21 @@
+release_id: v0.4.0-a14
+release_name: End-to-end platform release bundle
+atlas_name: multi_cancer_demo
+release_type: reproducible_demo_release
+purpose: Package the end-to-end OpenMultiOmics demo outputs into a reproducible release bundle with manifests, artifact inventory, and executive report.
+source_reports:
+  end_to_end_demo_summary: outputs/reports/end_to_end_demo/end_to_end_demo_summary.yaml
+  end_to_end_artifact_inventory: outputs/reports/end_to_end_demo/end_to_end_artifact_inventory.tsv
+  platform_capability_map: outputs/reports/end_to_end_demo/platform_capability_map.tsv
+  end_to_end_demo_report: outputs/reports/end_to_end_demo/end_to_end_demo_report.html
+expected_outputs:
+  release_dir: outputs/releases/v0.4.0-a14
+  release_manifest: outputs/releases/v0.4.0-a14/release_manifest.yaml
+  release_artifact_inventory: outputs/releases/v0.4.0-a14/release_artifact_inventory.tsv
+  release_capability_map: outputs/releases/v0.4.0-a14/release_capability_map.tsv
+  release_summary_report: outputs/releases/v0.4.0-a14/release_summary_report.html
+  release_readme: outputs/releases/v0.4.0-a14/README.md
+  release_archive: outputs/releases/v0.4.0-a14/OpenMultiOmics_v0.4.0-a14_release_bundle.zip
+agent_role:
+  stage: reproducible_release_packaging
+  purpose: preserve end-to-end system outputs and make the demo release shareable, auditable, and reproducible.
