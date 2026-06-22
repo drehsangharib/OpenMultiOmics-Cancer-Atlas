@@ -1,0 +1,19 @@
+request_id: multi_cancer_public_data_pilot_release_bundle_demo
+release_id: v0.4.0-a20
+release_name: Public-data pilot integration release bundle
+atlas_name: multi_cancer_public_data_pilot
+purpose: Package public-data pilot integration outputs into a shareable, auditable release bundle.
+source_integration_summary: outputs/public_data_acquisition/multi_cancer_realdata_pilot/pilot_integration_run/public_data_pilot_integration_summary.yaml
+source_integration_artifact_inventory: outputs/public_data_acquisition/multi_cancer_realdata_pilot/pilot_integration_run/public_data_pilot_integration_artifact_inventory.tsv
+source_integration_report: outputs/public_data_acquisition/multi_cancer_realdata_pilot/pilot_integration_run/public_data_pilot_integration_report.html
+source_pilot_bundle_manifest: outputs/public_data_acquisition/multi_cancer_realdata_pilot/pilot_feature_store_bundle/pilot_feature_store_bundle_manifest.yaml
+expected_outputs:
+  release_dir: outputs/public_data_acquisition/multi_cancer_realdata_pilot/pilot_release_bundle
+release_policy:
+  copy_source_reports: true
+  copy_key_manifests: true
+  create_archive: true
+  include_readme: true
+agent_role:
+  stage: public_data_pilot_release_packaging
+  purpose: preserve public-data pilot integration outputs as a reproducible release artifact.
