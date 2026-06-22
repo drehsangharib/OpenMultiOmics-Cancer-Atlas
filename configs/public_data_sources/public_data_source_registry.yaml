@@ -1,0 +1,47 @@
+sources:
+  gdc_tcga:
+    display_name: GDC TCGA public cancer genomics
+    source_type: public_cancer_data_portal
+    access_mode: controlled_api_or_portal_export
+    status: scaffold
+    supported_modalities:
+      - transcriptomics
+      - epigenome
+    suggested_atlases:
+      - brca
+      - luad
+      - gbm
+    identifier_examples:
+      - TCGA-BRCA
+      - TCGA-LUAD
+      - TCGA-GBM
+    acquisition_notes: Use exported file manifests or API-derived manifests as inputs; do not require direct network access inside core tests.
+
+  cptac:
+    display_name: CPTAC public cancer proteogenomics
+    source_type: public_cancer_proteogenomics_resource
+    access_mode: portal_or_manifest_export
+    status: scaffold
+    supported_modalities:
+      - proteomics
+      - transcriptomics
+    suggested_atlases:
+      - brca
+      - luad
+    identifier_examples:
+      - CPTAC-BRCA
+      - CPTAC-LUAD
+    acquisition_notes: Use portal-exported or user-provided manifests for raw/processed proteomics and companion omics datasets.
+
+  metabolomics_workbench:
+    display_name: Metabolomics Workbench public studies
+    source_type: public_metabolomics_repository
+    access_mode: study_accession_or_manifest_export
+    status: scaffold
+    supported_modalities:
+      - metabolomics
+    suggested_atlases:
+      - multi_cancer
+    identifier_examples:
+      - ST000000-placeholder
+    acquisition_notes: Use study accession metadata and exported file tables to build local acquisition manifests.

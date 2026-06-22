@@ -1,0 +1,29 @@
+request_id: multi_cancer_public_data_acquisition_demo
+atlas_name: multi_cancer_realdata_pilot
+purpose: Scaffold a public-data-backed acquisition plan for the OpenMultiOmics raw-data-to-biological-insight platform.
+requested_sources:
+  - source_id: gdc_tcga
+    atlas_hint: brca
+    modality: transcriptomics
+    dataset_query: TCGA-BRCA RNA-seq expression matrix or file manifest
+    priority: 1
+  - source_id: gdc_tcga
+    atlas_hint: gbm
+    modality: epigenome
+    dataset_query: TCGA-GBM DNA methylation beta-value matrix or file manifest
+    priority: 2
+  - source_id: cptac
+    atlas_hint: luad
+    modality: proteomics
+    dataset_query: CPTAC-LUAD protein abundance matrix or file manifest
+    priority: 3
+  - source_id: metabolomics_workbench
+    atlas_hint: multi_cancer
+    modality: metabolomics
+    dataset_query: cancer metabolomics abundance study or file manifest
+    priority: 4
+expected_outputs:
+  acquisition_plan_dir: outputs/public_data_acquisition/multi_cancer_realdata_pilot
+agent_role:
+  stage: public_data_acquisition_planning
+  purpose: create a reproducible bridge from public repository discovery to local data manifests and downstream feature-store execution.
