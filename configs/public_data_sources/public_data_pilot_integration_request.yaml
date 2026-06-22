@@ -1,0 +1,14 @@
+request_id: multi_cancer_public_data_pilot_integration_demo
+atlas_name: multi_cancer_public_data_pilot
+purpose: Run multi-omics integration and AI analysis on the public-data pilot feature-store bundle.
+pilot_bundle_manifest: outputs/public_data_acquisition/multi_cancer_realdata_pilot/pilot_feature_store_bundle/pilot_feature_store_bundle_manifest.yaml
+pilot_bundle_inventory: outputs/public_data_acquisition/multi_cancer_realdata_pilot/pilot_feature_store_bundle/pilot_feature_store_bundle_inventory.tsv
+expected_outputs:
+  integration_run_dir: outputs/public_data_acquisition/multi_cancer_realdata_pilot/pilot_integration_run
+integration_policy:
+  require_all_feature_store_manifests: true
+  run_full_analysis_chain: true
+  complete_cases_only: true
+agent_role:
+  stage: public_data_pilot_integration_execution
+  purpose: execute the multi-omics integration and AI interpretation chain on bundled public-data pilot feature stores.
