@@ -1,0 +1,15 @@
+request_id: multi_cancer_local_file_materialization_demo
+atlas_name: multi_cancer_realdata_pilot
+purpose: Materialize public-data acquisition manifest templates into trackable local file requirements and execution-ready data manifest stubs.
+acquisition_summary: outputs/public_data_acquisition/multi_cancer_realdata_pilot/public_data_acquisition_summary.yaml
+manifest_template_inventory: outputs/public_data_acquisition/multi_cancer_realdata_pilot/manifest_template_inventory.tsv
+local_data_root: data/public/multi_cancer_realdata_pilot
+materialization_policy:
+  create_placeholder_files: true
+  overwrite_existing_placeholders: false
+  require_real_files_for_execution: false
+expected_outputs:
+  materialization_dir: outputs/public_data_acquisition/multi_cancer_realdata_pilot/local_file_materialization
+agent_role:
+  stage: public_data_local_file_materialization
+  purpose: convert public-data acquisition templates into local file requirements, placeholders, and execution-ready manifest stubs.
