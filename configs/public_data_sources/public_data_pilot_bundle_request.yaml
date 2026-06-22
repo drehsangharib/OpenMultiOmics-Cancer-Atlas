@@ -1,0 +1,15 @@
+request_id: multi_cancer_public_data_pilot_bundle_demo
+atlas_name: multi_cancer_realdata_pilot
+purpose: Build a public-data pilot feature-store bundle from smoke-tested materialized public-data feature stores.
+execution_smoke_summary: outputs/public_data_acquisition/multi_cancer_realdata_pilot/execution_smoke/execution_smoke_summary.yaml
+execution_smoke_results: outputs/public_data_acquisition/multi_cancer_realdata_pilot/execution_smoke/execution_smoke_results.tsv
+expected_outputs:
+  pilot_bundle_dir: outputs/public_data_acquisition/multi_cancer_realdata_pilot/pilot_feature_store_bundle
+bundle_policy:
+  require_all_smoke_passed: true
+  include_feature_store_manifests: true
+  include_qc_summaries: true
+  include_modality_inventory: true
+agent_role:
+  stage: public_data_pilot_feature_store_bundling
+  purpose: collect smoke-tested public-data feature stores into a reusable pilot bundle for downstream integration and demo execution.
