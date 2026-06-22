@@ -1,0 +1,44 @@
+datasets:
+  tcga_brca_transcriptomics:
+    display_name: TCGA-BRCA transcriptomics candidate
+    source_id: gdc_tcga
+    accession_or_project_id: TCGA-BRCA
+    atlas_hint: brca
+    modality: transcriptomics
+    expected_file_type: expression_matrix_or_gdc_file_manifest
+    replacement_priority: 1
+    local_replacement_path: data/public/multi_cancer_realdata_pilot/brca/transcriptomics/REPLACE_WITH_TCGA_BRCA_TRANSCRIPTOMICS.tsv
+    notes: Replace placeholder transcriptomics matrix with a locally exported TCGA-BRCA expression matrix or file-manifest-derived matrix.
+
+  tcga_gbm_epigenome:
+    display_name: TCGA-GBM epigenome candidate
+    source_id: gdc_tcga
+    accession_or_project_id: TCGA-GBM
+    atlas_hint: gbm
+    modality: epigenome
+    expected_file_type: methylation_beta_matrix_or_gdc_file_manifest
+    replacement_priority: 2
+    local_replacement_path: data/public/multi_cancer_realdata_pilot/gbm/epigenome/REPLACE_WITH_TCGA_GBM_EPIGENOME.tsv
+    notes: Replace placeholder epigenome matrix with a locally exported TCGA-GBM methylation beta-value matrix.
+
+  cptac_luad_proteomics:
+    display_name: CPTAC-LUAD proteomics candidate
+    source_id: cptac
+    accession_or_project_id: CPTAC-LUAD
+    atlas_hint: luad
+    modality: proteomics
+    expected_file_type: protein_abundance_matrix_or_portal_manifest
+    replacement_priority: 3
+    local_replacement_path: data/public/multi_cancer_realdata_pilot/luad/proteomics/REPLACE_WITH_CPTAC_LUAD_PROTEOMICS.tsv
+    notes: Replace placeholder proteomics matrix with a locally exported CPTAC-LUAD protein abundance matrix.
+
+  metabolomics_workbench_cancer_metabolomics:
+    display_name: Metabolomics Workbench cancer metabolomics candidate
+    source_id: metabolomics_workbench
+    accession_or_project_id: REPLACE_WITH_STUDY_ACCESSION
+    atlas_hint: multi_cancer
+    modality: metabolomics
+    expected_file_type: metabolite_abundance_matrix_or_study_export
+    replacement_priority: 4
+    local_replacement_path: data/public/multi_cancer_realdata_pilot/multi_cancer/metabolomics/REPLACE_WITH_METABOLOMICS_WORKBENCH_STUDY.tsv
+    notes: Replace placeholder metabolomics matrix with a local exported cancer metabolomics abundance table.

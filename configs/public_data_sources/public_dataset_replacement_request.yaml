@@ -1,0 +1,17 @@
+request_id: multi_cancer_public_dataset_replacement_workflow_demo
+atlas_name: multi_cancer_realdata_pilot
+purpose: Build a replacement workflow that maps public dataset accessions to placeholder files and materialized manifest stubs.
+dataset_accession_registry: configs/public_data_sources/public_dataset_accession_registry.yaml
+local_file_requirements: outputs/public_data_acquisition/multi_cancer_realdata_pilot/local_file_materialization/local_file_requirements.tsv
+materialized_manifest_inventory: outputs/public_data_acquisition/multi_cancer_realdata_pilot/local_file_materialization/materialized_manifest_inventory.tsv
+portfolio_dashboard_summary: outputs/public_data_acquisition/multi_cancer_realdata_pilot/portfolio_dashboard/public_data_portfolio_dashboard_summary.yaml
+expected_outputs:
+  replacement_workflow_dir: outputs/public_data_acquisition/multi_cancer_realdata_pilot/dataset_replacement_workflow
+replacement_policy:
+  require_materialized_placeholders: true
+  require_accession_registry_coverage: true
+  generate_replacement_manifest_stubs: true
+  do_not_overwrite_original_manifests: true
+agent_role:
+  stage: public_dataset_replacement_workflow
+  purpose: formalize how placeholder public-data matrices are replaced by real public dataset files and accessions.
