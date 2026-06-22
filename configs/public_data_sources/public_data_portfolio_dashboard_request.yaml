@@ -1,0 +1,22 @@
+request_id: multi_cancer_public_data_portfolio_dashboard_demo
+portfolio_id: public_data_pilot_portfolio_v0_4_0_a21
+portfolio_name: Public-data pilot dashboard and portfolio report
+atlas_name: multi_cancer_public_data_pilot
+purpose: Build a dashboard-style index over the public-data acquisition, materialization, execution smoke, pilot bundle, integration, and release artifacts.
+source_artifacts:
+  acquisition_summary: outputs/public_data_acquisition/multi_cancer_realdata_pilot/public_data_acquisition_summary.yaml
+  materialization_summary: outputs/public_data_acquisition/multi_cancer_realdata_pilot/local_file_materialization/local_file_materialization_summary.yaml
+  execution_smoke_summary: outputs/public_data_acquisition/multi_cancer_realdata_pilot/execution_smoke/execution_smoke_summary.yaml
+  pilot_bundle_manifest: outputs/public_data_acquisition/multi_cancer_realdata_pilot/pilot_feature_store_bundle/pilot_feature_store_bundle_manifest.yaml
+  pilot_integration_summary: outputs/public_data_acquisition/multi_cancer_realdata_pilot/pilot_integration_run/public_data_pilot_integration_summary.yaml
+  pilot_release_manifest: outputs/public_data_acquisition/multi_cancer_realdata_pilot/pilot_release_bundle/public_data_pilot_release_manifest.yaml
+expected_outputs:
+  dashboard_dir: outputs/public_data_acquisition/multi_cancer_realdata_pilot/portfolio_dashboard
+portfolio_policy:
+  require_all_source_artifacts: true
+  include_html_index: true
+  include_markdown_index: true
+  include_release_links: true
+agent_role:
+  stage: public_data_portfolio_dashboard
+  purpose: summarize and index the full public-data pilot workflow for review, sharing, and next-step planning.
