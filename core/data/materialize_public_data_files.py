@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 
 import argparse
 import html
@@ -94,24 +94,32 @@ def infer_placeholder_matrix(modality):
 def modality_defaults(modality):
     defaults = {
         "transcriptomics": {
+            "data_type": "gene_expression_matrix",
+            "assay": "rna_seq",
             "feature_id_type": "gene_symbol_or_ensembl_id",
-            "normalization": "log2_transform",
+            "normalization": "log2_tpm_plus_one",
             "missing_value_strategy": "median_feature_imputation",
             "feature_filtering": "remove_zero_variance_features",
         },
         "proteomics": {
+            "data_type": "protein_abundance_matrix",
+            "assay": "mass_spectrometry",
             "feature_id_type": "protein_id_or_gene_symbol",
             "normalization": "median_centering",
             "missing_value_strategy": "half_minimum_imputation",
             "feature_filtering": "remove_high_missingness_features",
         },
         "epigenome": {
+            "data_type": "dna_methylation_matrix",
+            "assay": "methylation_array",
             "feature_id_type": "cpg_probe_id",
             "normalization": "beta_value_clipping",
             "missing_value_strategy": "median_feature_imputation",
             "feature_filtering": "remove_high_missingness_features",
         },
         "metabolomics": {
+            "data_type": "metabolite_abundance_matrix",
+            "assay": "mass_spectrometry_or_nmr",
             "feature_id_type": "metabolite_name_or_identifier",
             "normalization": "log_transform_then_scale",
             "missing_value_strategy": "half_minimum_imputation",
@@ -121,33 +129,79 @@ def modality_defaults(modality):
     return defaults.get(modality, defaults["transcriptomics"])
 
 
+def source_url_for_source(source_name):
+    source_name = str(source_name).lower()
+    if source_name == "gdc_tcga":
+        return "https://portal.gdc.cancer.gov/"
+    if source_name == "cptac":
+        return "https://proteomic.datacommons.cancer.gov/"
+    if source_name == "metabolomics_workbench":
+        return "https://www.metabolomicsworkbench.org/"
+    return "https://example.org/public-data-placeholder"
+
+
 def build_realdata_manifest_stub(template, local_file_path, atlas_name):
     modality = str(template.get("modality", "unknown"))
     defaults = modality_defaults(modality)
     input_file = get_template_input_file(template)
-    manifest = dict(template)
-    manifest["manifest_id"] = str(template.get("manifest_id", f"{atlas_name}_{modality}_materialized_manifest")).replace("public_data_manifest", "materialized_public_data_manifest")
-    manifest["atlas_name"] = str(template.get("atlas_name", atlas_name))
-    manifest["input_files"] = [dict(input_file)]
+    atlas_hint = str(template.get("atlas_name", atlas_name))
+    source_name = str(template.get("source_name", "public_data_source"))
+
+    feature_store_dir = Path("outputs") / "features" / modality / atlas_hint
+
+    manifest = {
+        "manifest_id": str(template.get("manifest_id", f"{atlas_hint}_{modality}_materialized_manifest")).replace(
+            "public_data_manifest", "materialized_public_data_manifest"
+        ),
+        "atlas_name": atlas_hint,
+        "modality": modality,
+        "data_type": defaults["data_type"],
+        "assay": str(template.get("assay", defaults["assay"])),
+        "species": str(template.get("species", "human")),
+        "source_name": source_name,
+        "source_url": str(template.get("source_url", source_url_for_source(source_name))),
+        "source_query": str(template.get("source_query", "")),
+        "access_level": str(template.get("access_level", "public_or_user_exported_manifest")),
+        "input_files": [dict(input_file)],
+        "sample_metadata": {
+            "path": str(Path(local_file_path).parent / f"{atlas_hint}_{modality}_sample_metadata_placeholder.tsv"),
+            "sample_id_column": "sample_id",
+        },
+        "feature_metadata": {
+            "path": str(Path(local_file_path).parent / f"{atlas_hint}_{modality}_feature_metadata_placeholder.tsv"),
+            "feature_id_column": "feature_id",
+        },
+        "processing_plan": dict(template.get("processing_plan", {})),
+        "expected_outputs": {
+            "feature_store_dir": str(feature_store_dir),
+            "normalized_matrix": str(feature_store_dir / "normalized_matrix.tsv"),
+            "sample_metadata": str(feature_store_dir / "sample_metadata.tsv"),
+            "feature_metadata": str(feature_store_dir / "feature_metadata.tsv"),
+            "qc_summary": str(feature_store_dir / "qc_summary.tsv"),
+        },
+        "agent_role": {
+            "stage": "materialized_public_data_manifest_stub",
+            "purpose": "provide a local execution-ready manifest stub that can be switched to real public files",
+        },
+        "materialization_status": "placeholder_ready_replace_with_real_public_file",
+    }
+
     manifest["input_files"][0]["path"] = str(local_file_path)
     manifest["input_files"][0]["file_format"] = str(input_file.get("file_format", "tsv"))
     manifest["input_files"][0]["matrix_orientation"] = str(input_file.get("matrix_orientation", "samples_by_features"))
     manifest["input_files"][0]["sample_id_column"] = str(input_file.get("sample_id_column", "sample_id"))
     manifest["input_files"][0]["feature_id_type"] = defaults["feature_id_type"]
-    manifest["processing_plan"] = dict(template.get("processing_plan", {}))
+
     manifest["processing_plan"].update(
         {
             "normalization": defaults["normalization"],
             "missing_value_strategy": defaults["missing_value_strategy"],
+            "batch_correction": str(manifest["processing_plan"].get("batch_correction", "none")),
             "feature_filtering": defaults["feature_filtering"],
             "max_missing_fraction": float(manifest["processing_plan"].get("max_missing_fraction", 0.5)),
         }
     )
-    manifest["materialization_status"] = "placeholder_ready_replace_with_real_public_file"
-    manifest["agent_role"] = {
-        "stage": "materialized_public_data_manifest_stub",
-        "purpose": "provide a local execution-ready manifest stub that can be switched to real public files",
-    }
+
     return manifest
 
 
@@ -236,7 +290,13 @@ def materialize_public_data_files(request_path=DEFAULT_MATERIALIZATION_REQUEST, 
     acquisition_summary = load_yaml_mapping(request["acquisition_summary"])
     template_inventory_df = read_table(request["manifest_template_inventory"])
     expected_outputs = request.get("expected_outputs", {})
-    output_dir = ensure_dir(output_dir or expected_outputs.get("materialization_dir", DEFAULT_OUTPUT_ROOT / request.get("atlas_name", "public_data_pilot") / "local_file_materialization"))
+    output_dir = ensure_dir(
+        output_dir
+        or expected_outputs.get(
+            "materialization_dir",
+            DEFAULT_OUTPUT_ROOT / request.get("atlas_name", "public_data_pilot") / "local_file_materialization",
+        )
+    )
 
     file_requirements_df, manifests = materialize_templates(request, template_inventory_df)
     manifest_inventory_df = write_materialized_manifest_stubs(manifests, output_dir)

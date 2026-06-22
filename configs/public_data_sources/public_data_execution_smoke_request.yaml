@@ -1,0 +1,14 @@
+request_id: multi_cancer_public_data_execution_smoke_demo
+atlas_name: multi_cancer_realdata_pilot
+purpose: Run modality processors against materialized public-data manifest stubs and summarize feature-store smoke-test readiness.
+materialization_summary: outputs/public_data_acquisition/multi_cancer_realdata_pilot/local_file_materialization/local_file_materialization_summary.yaml
+materialized_manifest_inventory: outputs/public_data_acquisition/multi_cancer_realdata_pilot/local_file_materialization/materialized_manifest_inventory.tsv
+expected_outputs:
+  smoke_run_dir: outputs/public_data_acquisition/multi_cancer_realdata_pilot/execution_smoke
+execution_policy:
+  run_processors: true
+  continue_on_failure: true
+  require_nonempty_outputs: true
+agent_role:
+  stage: public_data_execution_smoke_test
+  purpose: verify that materialized public-data manifest stubs can execute through modality feature-store processors.
