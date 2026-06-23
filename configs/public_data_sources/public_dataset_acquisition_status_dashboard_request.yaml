@@ -1,0 +1,22 @@
+request_id: multi_cancer_public_dataset_acquisition_status_dashboard_demo
+atlas_name: multi_cancer_realdata_pilot
+purpose: Build a status dashboard from the a27 public dataset acquisition workspace so acquisition progress can be tracked before real files are supplied.
+
+inputs:
+  acquisition_workspace_index: outputs/public_data_acquisition/multi_cancer_realdata_pilot/dataset_acquisition_workspace/public_dataset_acquisition_workspace_index.tsv
+  acquisition_workspace_summary: outputs/public_data_acquisition/multi_cancer_realdata_pilot/dataset_acquisition_workspace/public_dataset_acquisition_workspace_summary.yaml
+  acquisition_workspace_source_artifact_index: outputs/public_data_acquisition/multi_cancer_realdata_pilot/dataset_acquisition_workspace/public_dataset_acquisition_workspace_source_artifact_index.tsv
+
+expected_outputs:
+  acquisition_status_dashboard_dir: outputs/public_data_acquisition/multi_cancer_realdata_pilot/dataset_acquisition_status_dashboard
+
+dashboard_policy:
+  group_by_source: true
+  group_by_modality: true
+  include_next_actions: true
+  include_workspace_links: true
+  do_not_create_or_modify_real_replacement_files: true
+
+agent_role:
+  stage: public_dataset_acquisition_status_dashboard
+  purpose: summarize public dataset acquisition status, pending work, and local workspace links before real public files are supplied.
