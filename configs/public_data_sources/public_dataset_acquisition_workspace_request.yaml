@@ -1,0 +1,21 @@
+request_id: multi_cancer_public_dataset_acquisition_workspace_demo
+atlas_name: multi_cancer_realdata_pilot
+purpose: Build a local acquisition workspace from a26 public dataset acquisition instructions without downloading or modifying real public data files.
+
+inputs:
+  acquisition_instructions: outputs/public_data_acquisition/multi_cancer_realdata_pilot/dataset_acquisition_instructions/public_dataset_acquisition_instructions.tsv
+  acquisition_summary: outputs/public_data_acquisition/multi_cancer_realdata_pilot/dataset_acquisition_instructions/public_dataset_acquisition_instructions_summary.yaml
+  acquisition_source_artifact_index: outputs/public_data_acquisition/multi_cancer_realdata_pilot/dataset_acquisition_instructions/public_dataset_acquisition_instructions_source_artifact_index.tsv
+
+expected_outputs:
+  acquisition_workspace_dir: outputs/public_data_acquisition/multi_cancer_realdata_pilot/dataset_acquisition_workspace
+
+workspace_policy:
+  create_dataset_workspace_dirs: true
+  create_per_dataset_readme_files: true
+  do_not_create_or_modify_real_replacement_files: true
+  include_post_acquisition_validation_commands: true
+
+agent_role:
+  stage: public_dataset_acquisition_workspace_builder
+  purpose: create a local, auditable acquisition workspace with per-dataset instructions and checklist files for real public dataset replacement files.
