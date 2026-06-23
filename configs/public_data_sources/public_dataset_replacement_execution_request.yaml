@@ -1,0 +1,22 @@
+request_id: multi_cancer_public_dataset_replacement_execution_scaffold_demo
+atlas_name: multi_cancer_realdata_pilot
+purpose: Build a controlled execution scaffold from a23 public dataset replacement readiness outputs.
+
+inputs:
+  readiness_table: outputs/public_data_acquisition/multi_cancer_realdata_pilot/dataset_replacement_readiness/public_dataset_replacement_readiness_table.tsv
+  readiness_summary: outputs/public_data_acquisition/multi_cancer_realdata_pilot/dataset_replacement_readiness/public_dataset_replacement_readiness_summary.yaml
+  readiness_source_artifact_index: outputs/public_data_acquisition/multi_cancer_realdata_pilot/dataset_replacement_readiness/public_dataset_replacement_readiness_source_artifact_index.tsv
+
+expected_outputs:
+  execution_scaffold_dir: outputs/public_data_acquisition/multi_cancer_realdata_pilot/dataset_replacement_execution_scaffold
+
+execution_policy:
+  require_ready_for_replacement_validation: true
+  do_not_copy_or_modify_real_data_files: true
+  do_not_overwrite_replacement_manifests: true
+  generate_execution_job_manifests: true
+  generate_skip_records_for_not_ready_candidates: true
+
+agent_role:
+  stage: public_dataset_replacement_execution_scaffold
+  purpose: prepare auditable execution jobs for replacement candidates that passed readiness validation while recording explicit skip reasons for non-ready candidates.
