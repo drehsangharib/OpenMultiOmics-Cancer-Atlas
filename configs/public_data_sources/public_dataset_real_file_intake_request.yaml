@@ -1,0 +1,29 @@
+request_id: multi_cancer_public_dataset_real_file_intake_bundle_demo
+atlas_name: multi_cancer_realdata_pilot
+purpose: Build a real public dataset file intake/drop-zone bundle from a29 acquisition operations outputs.
+
+inputs:
+  acquisition_task_board: outputs/public_data_acquisition/multi_cancer_realdata_pilot/dataset_acquisition_operations/public_dataset_acquisition_task_board.tsv
+  acquisition_operations_summary: outputs/public_data_acquisition/multi_cancer_realdata_pilot/dataset_acquisition_operations/public_dataset_acquisition_operations_summary.yaml
+  acquisition_checklist: outputs/public_data_acquisition/multi_cancer_realdata_pilot/dataset_acquisition_operations/public_dataset_acquisition_checklist.md
+
+expected_outputs:
+  real_file_intake_dir: outputs/public_data_acquisition/multi_cancer_realdata_pilot/real_file_intake
+  dropzone_root: data/public/multi_cancer_realdata_pilot/real_file_dropzone
+
+intake_policy:
+  create_dropzone_directories: true
+  create_per_dataset_dropzone_readmes: true
+  do_not_create_or_modify_real_replacement_files: true
+  mirror_expected_target_paths: true
+  scan_existing_candidate_files: true
+  candidate_extensions:
+    - .tsv
+    - .csv
+    - .txt
+    - .tsv.gz
+    - .csv.gz
+
+agent_role:
+  stage: public_dataset_real_file_intake_bundle
+  purpose: create a standardized local dropzone and intake inventory for real public dataset replacement files without downloading or modifying data.
