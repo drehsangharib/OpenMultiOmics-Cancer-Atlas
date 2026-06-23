@@ -1,0 +1,26 @@
+request_id: multi_cancer_public_dataset_replacement_file_validation_demo
+atlas_name: multi_cancer_realdata_pilot
+purpose: Validate local real public dataset replacement files before downstream replacement execution.
+
+inputs:
+  execution_jobs: outputs/public_data_acquisition/multi_cancer_realdata_pilot/dataset_replacement_execution_scaffold/public_dataset_replacement_execution_jobs.tsv
+  execution_summary: outputs/public_data_acquisition/multi_cancer_realdata_pilot/dataset_replacement_execution_scaffold/public_dataset_replacement_execution_summary.yaml
+  execution_source_artifact_index: outputs/public_data_acquisition/multi_cancer_realdata_pilot/dataset_replacement_execution_scaffold/public_dataset_replacement_execution_source_artifact_index.tsv
+
+expected_outputs:
+  file_validation_dir: outputs/public_data_acquisition/multi_cancer_realdata_pilot/dataset_replacement_file_validation
+
+validation_policy:
+  require_ready_execution_job: true
+  require_real_replacement_file: true
+  require_readable_table: true
+  minimum_rows: 1
+  minimum_columns: 2
+  allowed_extensions:
+    - .tsv
+    - .csv
+    - .txt
+
+agent_role:
+  stage: public_dataset_replacement_file_validation
+  purpose: validate real local replacement file structure before modality-specific replacement execution.
