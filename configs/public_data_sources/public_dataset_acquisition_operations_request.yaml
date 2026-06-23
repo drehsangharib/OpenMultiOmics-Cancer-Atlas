@@ -1,0 +1,23 @@
+request_id: multi_cancer_public_dataset_acquisition_operations_bundle_demo
+atlas_name: multi_cancer_realdata_pilot
+purpose: Build a bundled acquisition operations layer from the a28 public dataset acquisition status dashboard.
+
+inputs:
+  acquisition_status_dashboard: outputs/public_data_acquisition/multi_cancer_realdata_pilot/dataset_acquisition_status_dashboard/public_dataset_acquisition_status_dashboard.tsv
+  acquisition_status_summary: outputs/public_data_acquisition/multi_cancer_realdata_pilot/dataset_acquisition_status_dashboard/public_dataset_acquisition_status_summary.yaml
+  acquisition_status_by_source: outputs/public_data_acquisition/multi_cancer_realdata_pilot/dataset_acquisition_status_dashboard/public_dataset_acquisition_status_by_source.tsv
+  acquisition_status_by_modality: outputs/public_data_acquisition/multi_cancer_realdata_pilot/dataset_acquisition_status_dashboard/public_dataset_acquisition_status_by_modality.tsv
+
+expected_outputs:
+  acquisition_operations_dir: outputs/public_data_acquisition/multi_cancer_realdata_pilot/dataset_acquisition_operations
+
+operations_policy:
+  include_task_board: true
+  include_markdown_checklist: true
+  include_source_templates: true
+  include_progress_rollup: true
+  do_not_create_or_modify_real_replacement_files: true
+
+agent_role:
+  stage: public_dataset_acquisition_operations_bundle
+  purpose: create an operational task board, checklist, source-specific templates, and progress rollup for public dataset acquisition.
