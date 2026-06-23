@@ -1,0 +1,23 @@
+request_id: multi_cancer_public_dataset_acquisition_instructions_demo
+atlas_name: multi_cancer_realdata_pilot
+purpose: Build actionable acquisition instructions for public dataset replacement candidates that still need real local files.
+
+inputs:
+  dataset_accession_registry: configs/public_data_sources/public_dataset_accession_registry.yaml
+  replacement_plan: outputs/public_data_acquisition/multi_cancer_realdata_pilot/dataset_replacement_workflow/public_dataset_replacement_plan.tsv
+  readiness_table: outputs/public_data_acquisition/multi_cancer_realdata_pilot/dataset_replacement_readiness/public_dataset_replacement_readiness_table.tsv
+  execution_jobs: outputs/public_data_acquisition/multi_cancer_realdata_pilot/dataset_replacement_execution_scaffold/public_dataset_replacement_execution_jobs.tsv
+  file_validation_table: outputs/public_data_acquisition/multi_cancer_realdata_pilot/dataset_replacement_file_validation/public_dataset_replacement_file_validation_table.tsv
+
+expected_outputs:
+  acquisition_instructions_dir: outputs/public_data_acquisition/multi_cancer_realdata_pilot/dataset_acquisition_instructions
+
+instruction_policy:
+  include_only_not_ready_or_unvalidated: false
+  include_validation_commands: true
+  include_replacement_paths: true
+  include_source_specific_guidance: true
+
+agent_role:
+  stage: public_dataset_acquisition_instructions_builder
+  purpose: generate actionable per-dataset instructions for acquiring/exporting real public dataset files and placing them at expected local replacement paths.
