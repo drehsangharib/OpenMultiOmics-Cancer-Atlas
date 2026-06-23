@@ -1,0 +1,48 @@
+request_id: multi_cancer_public_dataset_modality_schema_validation_demo
+atlas_name: multi_cancer_realdata_pilot
+purpose: Run modality-aware schema validation for real public dataset files discovered by the a30 real-file intake bundle.
+
+inputs:
+  real_file_intake_inventory: outputs/public_data_acquisition/multi_cancer_realdata_pilot/real_file_intake/public_dataset_real_file_intake_inventory.tsv
+  real_file_intake_summary: outputs/public_data_acquisition/multi_cancer_realdata_pilot/real_file_intake/public_dataset_real_file_intake_summary.yaml
+  real_file_intake_source_artifact_index: outputs/public_data_acquisition/multi_cancer_realdata_pilot/real_file_intake/public_dataset_real_file_intake_source_artifact_index.tsv
+
+expected_outputs:
+  modality_schema_validation_dir: outputs/public_data_acquisition/multi_cancer_realdata_pilot/modality_schema_validation
+
+schema_policy:
+  do_not_create_or_modify_real_replacement_files: true
+  minimum_rows: 1
+  minimum_columns: 2
+  numeric_fraction_threshold: 0.5
+  allowed_extensions:
+    - .tsv
+    - .csv
+    - .txt
+    - .tsv.gz
+    - .csv.gz
+  modality_id_hints:
+    transcriptomics:
+      - sample
+      - gene
+      - transcript
+      - id
+    epigenome:
+      - sample
+      - probe
+      - cpg
+      - id
+    proteomics:
+      - sample
+      - protein
+      - peptide
+      - id
+    metabolomics:
+      - sample
+      - metabolite
+      - feature
+      - id
+
+agent_role:
+  stage: public_dataset_modality_schema_validation
+  purpose: validate real public dataset tables with modality-specific structural rules before manifest activation or feature-store handoff.
