@@ -1,0 +1,24 @@
+request_id: multi_cancer_public_dataset_real_acquisition_accelerator_demo
+atlas_name: multi_cancer_realdata_pilot
+purpose: Build a master real public-data acquisition accelerator bundle from source access packets, intake state, and modality-schema validation state.
+inputs:
+  source_access_packets: outputs/public_data_acquisition/multi_cancer_realdata_pilot/source_access_packets/public_dataset_source_access_packets.tsv
+  source_access_summary: outputs/public_data_acquisition/multi_cancer_realdata_pilot/source_access_packets/public_dataset_source_access_summary.yaml
+  source_packet_yaml_inventory: outputs/public_data_acquisition/multi_cancer_realdata_pilot/source_access_packets/public_dataset_source_packet_yaml_inventory.tsv
+  source_portal_links: outputs/public_data_acquisition/multi_cancer_realdata_pilot/source_access_packets/public_dataset_source_portal_links.tsv
+  real_file_intake_inventory: outputs/public_data_acquisition/multi_cancer_realdata_pilot/real_file_intake/public_dataset_real_file_intake_inventory.tsv
+  modality_schema_validation_table: outputs/public_data_acquisition/multi_cancer_realdata_pilot/modality_schema_validation/public_dataset_modality_schema_validation_table.tsv
+expected_outputs:
+  real_acquisition_accelerator_dir: outputs/public_data_acquisition/multi_cancer_realdata_pilot/real_acquisition_accelerator
+accelerator_policy:
+  generate_master_plan: true
+  generate_priority_queue: true
+  generate_accession_resolution_queue: true
+  generate_target_path_plan: true
+  generate_validation_rerun_plan: true
+  generate_operator_workbook: true
+  do_not_download_data: true
+  do_not_create_or_modify_real_replacement_files: true
+agent_role:
+  stage: public_dataset_real_acquisition_accelerator_bundle
+  purpose: consolidate source access packets into an operator-ready master plan for acquiring real public files and rerunning validation gates.
