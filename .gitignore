@@ -88,3 +88,9 @@ outputs/dev/
 
 # Generated subset exports
 outputs/subsets/
+
+# Runtime public-data acquisition artifacts
+downloads/
+data/public/multi_cancer_realdata_pilot/
+outputs/public_data_acquisition/
+exports/
