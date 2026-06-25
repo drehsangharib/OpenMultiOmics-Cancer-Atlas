@@ -1,0 +1,26 @@
+request_id: multi_cancer_real_data_pilot_lock_activation_correction_demo
+atlas_name: multi_cancer_realdata_pilot
+purpose: Lock the real-data pilot to file-present and schema-validated TCGA-BRCA transcriptomics, preventing pilot selection from switching to missing GBM after BRCA becomes available.
+
+inputs:
+  real_file_intake_inventory: outputs/public_data_acquisition/multi_cancer_realdata_pilot/real_file_intake/public_dataset_real_file_intake_inventory.tsv
+  modality_schema_validation_table: outputs/public_data_acquisition/multi_cancer_realdata_pilot/modality_schema_validation/public_dataset_modality_schema_validation_table.tsv
+  real_acquisition_master_plan: outputs/public_data_acquisition/multi_cancer_realdata_pilot/real_acquisition_accelerator/public_dataset_real_acquisition_master_plan.tsv
+  first_real_pilot_selection: outputs/public_data_acquisition/multi_cancer_realdata_pilot/first_real_pilot_activation/public_dataset_first_real_pilot_selection.tsv
+  real_data_smoke_test_state: outputs/public_data_acquisition/multi_cancer_realdata_pilot/real_data_smoke_test_activation/public_dataset_real_data_smoke_test_state.tsv
+
+expected_outputs:
+  real_data_pilot_lock_dir: outputs/public_data_acquisition/multi_cancer_realdata_pilot/real_data_pilot_lock_activation_correction
+
+pilot_lock_policy:
+  preferred_dataset_id: tcga_brca_transcriptomics
+  require_target_file_present: true
+  require_modality_schema_validated: true
+  fallback_to_any_validated_real_file: true
+  do_not_download_data: true
+  do_not_create_or_modify_real_replacement_files: true
+  do_not_overwrite_original_manifests: true
+
+agent_role:
+  stage: real_data_pilot_lock_activation_correction
+  purpose: lock smoke-test activation to the validated real BRCA pilot and generate corrected activation/handoff readiness outputs.
