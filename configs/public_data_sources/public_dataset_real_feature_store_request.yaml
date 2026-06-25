@@ -1,0 +1,32 @@
+request_id: multi_cancer_real_data_feature_store_materialization_demo
+atlas_name: multi_cancer_realdata_pilot
+purpose: Materialize the validated and locked TCGA-BRCA transcriptomics real-data pilot into an AI-ready feature-store bundle with sample/gene summaries, QC metrics, manifest, and report.
+
+inputs:
+  locked_real_data_pilot: outputs/public_data_acquisition/multi_cancer_realdata_pilot/real_data_pilot_lock_activation_correction/public_dataset_locked_real_data_pilot.tsv
+  corrected_smoke_test_state: outputs/public_data_acquisition/multi_cancer_realdata_pilot/real_data_pilot_lock_activation_correction/public_dataset_corrected_real_data_smoke_test_state.tsv
+  pilot_lock_summary: outputs/public_data_acquisition/multi_cancer_realdata_pilot/real_data_pilot_lock_activation_correction/public_dataset_real_data_pilot_lock_summary.yaml
+
+expected_outputs:
+  real_feature_store_dir: outputs/public_data_acquisition/multi_cancer_realdata_pilot/real_feature_store
+
+feature_store_policy:
+  require_activation_ready: true
+  require_feature_store_handoff_ready: true
+  do_not_modify_source_real_file: true
+  feature_matrix_transform: log2_x_plus_1
+  missing_value_fill: 0
+  write_ai_ready_matrix: true
+  write_gene_summary: true
+  write_sample_summary: true
+  write_manifest: true
+  write_html_report: true
+  fallback_known_real_matrix_paths: true
+  known_real_matrix_paths:
+    tcga_brca_transcriptomics: data/public/multi_cancer_realdata_pilot/brca/transcriptomics/REPLACE_WITH_TCGA_BRCA_TRANSCRIPTOMICS.tsv
+  known_modalities:
+    tcga_brca_transcriptomics: transcriptomics
+
+agent_role:
+  stage: real_data_feature_store_materialization
+  purpose: transform validated TCGA-BRCA transcriptomics real data into a downstream AI-ready feature matrix and auditable feature-store manifest.
