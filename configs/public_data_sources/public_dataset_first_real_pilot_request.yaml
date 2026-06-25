@@ -1,0 +1,30 @@
+request_id: multi_cancer_public_dataset_first_real_pilot_activation_demo
+atlas_name: multi_cancer_realdata_pilot
+purpose: Select the first real public dataset pilot, prepare activation and handoff plans, and generate a rerun workflow for validating the first real file.
+
+inputs:
+  real_acquisition_master_plan: outputs/public_data_acquisition/multi_cancer_realdata_pilot/real_acquisition_accelerator/public_dataset_real_acquisition_master_plan.tsv
+  real_acquisition_priority_queue: outputs/public_data_acquisition/multi_cancer_realdata_pilot/real_acquisition_accelerator/public_dataset_real_acquisition_priority_queue.tsv
+  real_acquisition_summary: outputs/public_data_acquisition/multi_cancer_realdata_pilot/real_acquisition_accelerator/public_dataset_real_acquisition_summary.yaml
+  source_access_packets: outputs/public_data_acquisition/multi_cancer_realdata_pilot/source_access_packets/public_dataset_source_access_packets.tsv
+  modality_schema_validation_table: outputs/public_data_acquisition/multi_cancer_realdata_pilot/modality_schema_validation/public_dataset_modality_schema_validation_table.tsv
+
+expected_outputs:
+  first_real_pilot_activation_dir: outputs/public_data_acquisition/multi_cancer_realdata_pilot/first_real_pilot_activation
+
+pilot_policy:
+  prefer_ready_to_acquire: true
+  max_pilots: 1
+  preferred_modalities:
+    - transcriptomics
+    - epigenome
+    - proteomics
+    - metabolomics
+  do_not_download_data: true
+  do_not_create_or_modify_real_replacement_files: true
+  generate_activation_when_file_present: true
+  generate_feature_store_handoff_plan: true
+
+agent_role:
+  stage: public_dataset_first_real_pilot_activation_bundle
+  purpose: move from acquisition planning to a concrete first-real-dataset pilot activation and feature-store handoff plan.
