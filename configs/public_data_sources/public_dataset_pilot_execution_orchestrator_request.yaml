@@ -1,0 +1,29 @@
+request_id: multi_cancer_public_dataset_pilot_execution_orchestrator_demo
+atlas_name: multi_cancer_realdata_pilot
+purpose: Build a larger first-real-pilot execution orchestrator bundle that combines pilot validation state, manifest activation planning, feature-store handoff planning, and a single rerun command plan.
+
+inputs:
+  first_real_pilot_selection: outputs/public_data_acquisition/multi_cancer_realdata_pilot/first_real_pilot_activation/public_dataset_first_real_pilot_selection.tsv
+  first_real_pilot_readiness: outputs/public_data_acquisition/multi_cancer_realdata_pilot/first_real_pilot_activation/public_dataset_first_real_pilot_readiness.tsv
+  first_real_pilot_activation_plan: outputs/public_data_acquisition/multi_cancer_realdata_pilot/first_real_pilot_activation/public_dataset_first_real_pilot_activation_plan.tsv
+  first_real_pilot_feature_store_handoff_plan: outputs/public_data_acquisition/multi_cancer_realdata_pilot/first_real_pilot_activation/public_dataset_first_real_pilot_feature_store_handoff_plan.tsv
+  first_real_pilot_summary: outputs/public_data_acquisition/multi_cancer_realdata_pilot/first_real_pilot_activation/public_dataset_first_real_pilot_summary.yaml
+  file_validation_table: outputs/public_data_acquisition/multi_cancer_realdata_pilot/dataset_replacement_file_validation/public_dataset_replacement_file_validation_table.tsv
+  modality_schema_validation_table: outputs/public_data_acquisition/multi_cancer_realdata_pilot/modality_schema_validation/public_dataset_modality_schema_validation_table.tsv
+
+expected_outputs:
+  pilot_execution_orchestrator_dir: outputs/public_data_acquisition/multi_cancer_realdata_pilot/pilot_execution_orchestrator
+
+orchestrator_policy:
+  do_not_download_data: true
+  do_not_create_or_modify_real_replacement_files: true
+  do_not_overwrite_original_manifests: true
+  generate_manifest_activation_queue: true
+  generate_feature_store_handoff_queue: true
+  generate_end_to_end_rerun_script: true
+  require_file_validation_pass: true
+  require_modality_schema_validation_pass: true
+
+agent_role:
+  stage: public_dataset_pilot_execution_orchestrator_bundle
+  purpose: combine first-real-pilot validation, manifest activation, and feature-store handoff readiness into one execution orchestrator.
