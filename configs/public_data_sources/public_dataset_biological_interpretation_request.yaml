@@ -1,0 +1,27 @@
+{
+  "version": "v0.4.0-a41",
+  "bundle_name": "biological_interpretation_layer",
+  "project": "OpenMultiOmics-Cancer-Atlas",
+  "upstream_version": "v0.4.0-a40",
+  "upstream_commit": "716a7ce",
+  "inputs": {
+    "pca_coordinates": "outputs/public_data_acquisition/multi_cancer_realdata_pilot/ai_modeling_execution/pca_coordinates.tsv",
+    "kmeans_clusters": "outputs/public_data_acquisition/multi_cancer_realdata_pilot/ai_modeling_execution/kmeans_clusters.tsv",
+    "feature_importance": "outputs/public_data_acquisition/multi_cancer_realdata_pilot/ai_modeling_execution/feature_importance.tsv",
+    "modeling_summary": "outputs/public_data_acquisition/multi_cancer_realdata_pilot/ai_modeling_execution/modeling_summary.yaml"
+  },
+  "outputs": {
+    "interpretation_dir": "outputs/public_data_acquisition/multi_cancer_realdata_pilot/biological_interpretation",
+    "pca_cluster_png": "outputs/public_data_acquisition/multi_cancer_realdata_pilot/biological_interpretation/pca_kmeans_clusters.png",
+    "feature_importance_png": "outputs/public_data_acquisition/multi_cancer_realdata_pilot/biological_interpretation/top_feature_importance.png",
+    "top_features_interpretation": "outputs/public_data_acquisition/multi_cancer_realdata_pilot/biological_interpretation/top_features_interpretation.tsv",
+    "gene_set_interpretation": "outputs/public_data_acquisition/multi_cancer_realdata_pilot/biological_interpretation/gene_set_interpretation.tsv",
+    "report_markdown": "outputs/public_data_acquisition/multi_cancer_realdata_pilot/biological_interpretation/biological_interpretation_report.md",
+    "summary_json": "outputs/public_data_acquisition/multi_cancer_realdata_pilot/biological_interpretation/biological_interpretation_summary.json"
+  },
+  "parameters": {
+    "top_n_features": 30,
+    "gene_set_top_n": 100,
+    "figure_dpi": 160
+  }
+}
