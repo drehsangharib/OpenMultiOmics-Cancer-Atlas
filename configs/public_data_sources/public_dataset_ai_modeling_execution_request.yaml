@@ -1,0 +1,25 @@
+request_id: multi_cancer_real_data_ai_modeling_execution_demo
+atlas_name: multi_cancer_realdata_pilot
+purpose: Execute baseline AI modeling on TCGA-BRCA AI-ready benchmark handoff data.
+
+inputs:
+  model_input_matrix: outputs/public_data_acquisition/multi_cancer_realdata_pilot/ai_ready_benchmark_handoff/tcga_brca_transcriptomics_model_input_matrix.tsv
+  sample_split_manifest: outputs/public_data_acquisition/multi_cancer_realdata_pilot/ai_ready_benchmark_handoff/tcga_brca_transcriptomics_sample_split_manifest.tsv
+  feature_selection_table: outputs/public_data_acquisition/multi_cancer_realdata_pilot/ai_ready_benchmark_handoff/tcga_brca_transcriptomics_feature_selection_table.tsv
+
+expected_outputs:
+  ai_modeling_execution_dir: outputs/public_data_acquisition/multi_cancer_realdata_pilot/ai_modeling_execution
+
+modeling_policy:
+  n_pca_components: 5
+  kmeans_clusters: 3
+  random_seed: 123
+  write_pca: true
+  write_kmeans: true
+  write_feature_importance: true
+  write_summary: true
+  write_html_report: true
+
+agent_role:
+  stage: real_data_ai_modeling_execution
+  purpose: run baseline ML models and produce interpretable outputs from AI-ready TCGA-BRCA data.
