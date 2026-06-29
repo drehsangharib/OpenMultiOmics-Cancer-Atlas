@@ -1,0 +1,31 @@
+request_id: multi_cancer_real_data_ai_ready_benchmark_handoff_demo
+atlas_name: multi_cancer_realdata_pilot
+purpose: Build an AI-ready benchmark and modeling handoff bundle from the validated TCGA-BRCA real-data feature store.
+
+inputs:
+  feature_store_manifest: outputs/public_data_acquisition/multi_cancer_realdata_pilot/real_feature_store/tcga_brca_transcriptomics_feature_store_manifest.yaml
+  feature_store_summary: outputs/public_data_acquisition/multi_cancer_realdata_pilot/real_feature_store/tcga_brca_transcriptomics_feature_store_summary.yaml
+  ai_ready_feature_matrix: outputs/public_data_acquisition/multi_cancer_realdata_pilot/real_feature_store/tcga_brca_transcriptomics_ai_ready_feature_matrix.tsv
+  sample_summary: outputs/public_data_acquisition/multi_cancer_realdata_pilot/real_feature_store/tcga_brca_transcriptomics_sample_summary.tsv
+  gene_summary: outputs/public_data_acquisition/multi_cancer_realdata_pilot/real_feature_store/tcga_brca_transcriptomics_gene_summary.tsv
+
+expected_outputs:
+  ai_ready_benchmark_handoff_dir: outputs/public_data_acquisition/multi_cancer_realdata_pilot/ai_ready_benchmark_handoff
+
+handoff_policy:
+  top_variable_features: 5000
+  train_fraction: 0.70
+  validation_fraction: 0.15
+  test_fraction: 0.15
+  split_seed: 39037
+  unknown_label_value: unlabeled
+  min_feature_variance: 0
+  write_model_input_matrix: true
+  write_feature_selection_table: true
+  write_sample_split_manifest: true
+  write_model_handoff_manifest: true
+  write_html_report: true
+
+agent_role:
+  stage: real_data_ai_ready_benchmark_handoff
+  purpose: convert the TCGA-BRCA real feature store into deterministic AI/modeling-ready inputs and benchmark handoff artifacts.
