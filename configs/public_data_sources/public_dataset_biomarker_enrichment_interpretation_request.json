@@ -1,0 +1,62 @@
+{
+  "version": "v0.4.0-a42-fix3",
+  "bundle_name": "gdc_star_header_annotation_recovery_bridge",
+  "project": "OpenMultiOmics-Cancer-Atlas",
+  "upstream_version": "v0.4.0-a41",
+  "upstream_commit": "ff9bcd6",
+  "description": "Recover gene_id to gene_name annotation from GDC STAR-count files with metadata/preamble-aware header detection, then rerun biomarker enrichment quality gates.",
+  "inputs": {
+    "feature_importance": "outputs/public_data_acquisition/multi_cancer_realdata_pilot/ai_modeling_execution/feature_importance.tsv",
+    "kmeans_clusters": "outputs/public_data_acquisition/multi_cancer_realdata_pilot/ai_modeling_execution/kmeans_clusters.tsv",
+    "model_input_matrix_candidates": [
+      "outputs/public_data_acquisition/multi_cancer_realdata_pilot/ai_ready_benchmark/model_input_matrix.tsv",
+      "outputs/public_data_acquisition/multi_cancer_realdata_pilot/ai_ready_modeling_handoff/model_input_matrix.tsv",
+      "outputs/public_data_acquisition/multi_cancer_realdata_pilot/ai_benchmark_handoff/model_input_matrix.tsv",
+      "outputs/public_data_acquisition/multi_cancer_realdata_pilot/real_feature_store/feature_matrix.tsv",
+      "outputs/public_data_acquisition/multi_cancer_realdata_pilot/real_feature_store/model_input_matrix.tsv"
+    ],
+    "primary_annotation_output": "data/public/multi_cancer_realdata_pilot/brca/transcriptomics/gene_annotation.tsv",
+    "annotation_source_roots": [
+      "downloads/gdc_tcga_brca_transcriptomics",
+      "downloads\\gdc_tcga_brca_transcriptomics",
+      "data/public/multi_cancer_realdata_pilot/brca/transcriptomics",
+      "data\\public\\multi_cancer_realdata_pilot\\brca\\transcriptomics"
+    ],
+    "gene_annotation_candidates": [
+      "data/public/multi_cancer_realdata_pilot/brca/transcriptomics/gene_annotation.tsv",
+      "outputs/public_data_acquisition/multi_cancer_realdata_pilot/biomarker_enrichment_interpretation/recovered_gene_annotation.tsv",
+      "data/public/multi_cancer_realdata_pilot/brca/transcriptomics/REPLACE_WITH_TCGA_BRCA_TRANSCRIPTOMICS.tsv",
+      "outputs/public_data_acquisition/multi_cancer_realdata_pilot/feature_store/gene_annotation.tsv",
+      "outputs/public_data_acquisition/multi_cancer_realdata_pilot/real_feature_store/gene_annotation.tsv"
+    ],
+    "clinical_metadata_candidates": [
+      "data/public/multi_cancer_realdata_pilot/brca/clinical/tcga_brca_clinical_metadata.tsv",
+      "data/public/multi_cancer_realdata_pilot/brca/clinical/tcga_brca_subtype_metadata.tsv",
+      "outputs/public_data_acquisition/multi_cancer_realdata_pilot/clinical/tcga_brca_clinical_metadata.tsv",
+      "outputs/public_data_acquisition/multi_cancer_realdata_pilot/clinical/tcga_brca_subtype_metadata.tsv"
+    ]
+  },
+  "outputs": {
+    "interpretation_dir": "outputs/public_data_acquisition/multi_cancer_realdata_pilot/biomarker_enrichment_interpretation",
+    "recovered_gene_annotation": "outputs/public_data_acquisition/multi_cancer_realdata_pilot/biomarker_enrichment_interpretation/recovered_gene_annotation.tsv",
+    "annotation_recovery_diagnostics": "outputs/public_data_acquisition/multi_cancer_realdata_pilot/biomarker_enrichment_interpretation/annotation_recovery_diagnostics.tsv",
+    "annotation_resolution_diagnostics": "outputs/public_data_acquisition/multi_cancer_realdata_pilot/biomarker_enrichment_interpretation/annotation_resolution_diagnostics.tsv",
+    "resolved_feature_importance": "outputs/public_data_acquisition/multi_cancer_realdata_pilot/biomarker_enrichment_interpretation/resolved_feature_importance.tsv",
+    "unresolved_features": "outputs/public_data_acquisition/multi_cancer_realdata_pilot/biomarker_enrichment_interpretation/unresolved_features.tsv",
+    "gene_set_enrichment": "outputs/public_data_acquisition/multi_cancer_realdata_pilot/biomarker_enrichment_interpretation/gene_set_enrichment.tsv",
+    "gene_set_enrichment_png": "outputs/public_data_acquisition/multi_cancer_realdata_pilot/biomarker_enrichment_interpretation/gene_set_enrichment.png",
+    "cluster_feature_signal": "outputs/public_data_acquisition/multi_cancer_realdata_pilot/biomarker_enrichment_interpretation/cluster_feature_signal.tsv",
+    "clinical_bridge_status": "outputs/public_data_acquisition/multi_cancer_realdata_pilot/biomarker_enrichment_interpretation/clinical_bridge_status.tsv",
+    "interpretation_report": "outputs/public_data_acquisition/multi_cancer_realdata_pilot/biomarker_enrichment_interpretation/biomarker_enrichment_interpretation_report.md",
+    "summary_json": "outputs/public_data_acquisition/multi_cancer_realdata_pilot/biomarker_enrichment_interpretation/biomarker_enrichment_interpretation_summary.json"
+  },
+  "parameters": {
+    "top_n_features": 250,
+    "top_n_report_features": 40,
+    "cluster_top_n_features": 30,
+    "figure_dpi": 160,
+    "minimum_resolved_fraction_for_biomarker_review": 0.25,
+    "minimum_gene_sets_with_matches_for_biomarker_review": 1,
+    "star_header_scan_lines": 200
+  }
+}
